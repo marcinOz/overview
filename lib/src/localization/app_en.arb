@@ -1,0 +1,38 @@
+{
+  "appTitle": "overview",
+  "@appTitle": {
+    "description": "The title of the application"
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Dashboard"
+  },
+  "token": "Token",
+  "@token": {
+    "description": "Token"
+  },
+  "signIn": "SignIn",
+  "@signIn": {
+    "description": "SignIn"
+  },
+  "owner": "Owner",
+  "@owner": {
+    "description": "Owner"
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Name"
+  },
+  "repoOwnerAndName": "Repository owner and name:",
+  "@repoOwnerAndName": {
+    "description": "Repository owner and name:"
+  },
+  "submit": "Submit",
+  "@submit": {
+    "description": "Submit"
+  },
+  "avgPrLeadTime": "AVG PR Lead Time (since beginning): ",
+  "@avgPrLeadTime": {
+    "description": "AVG PR Lead Time (since beginning): "
+  }
+}
