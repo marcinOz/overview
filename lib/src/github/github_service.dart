@@ -62,13 +62,34 @@ class GithubService {
 
   Future<Either<AppError, List<PullRequest>>> getPRs() async {
     try {
-      final prList = (await gitHub.pullRequests.list(
-        RepositorySlug(
-          currentRepo.owner!.login,
-          currentRepo.name,
-        ),
-        state: "closed",
-      ).toList());
+      final prList = (await gitHub.pullRequests
+          .list(
+            RepositorySlug(
+              currentRepo.owner!.login,
+              currentRepo.name,
+            ),
+            state: "closed",
+          )
+          .toList());
+      return right(prList);
+    } on AccessForbidden catch (e) {
+      return left(AppError(message: e.message!));
+    }
+  }
+
+  Future<Either<AppError, List<PullRequestReview>>> getReviewsFor(
+    PullRequest pr,
+  ) async {
+    try {
+      final prList = (await gitHub.pullRequests
+          .listReviews(
+            RepositorySlug(
+              currentRepo.owner!.login,
+              currentRepo.name,
+            ),
+            pr.number!,
+          )
+          .toList());
       return right(prList);
     } on AccessForbidden catch (e) {
       return left(AppError(message: e.message!));

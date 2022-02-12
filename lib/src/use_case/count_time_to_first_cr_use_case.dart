@@ -1,18 +1,19 @@
 import 'package:github/github.dart';
 
-class CountPrLeadTimeUseCase {
-  Duration call(List<PullRequest> prList) {
-    int size = prList.length;
+class CountTimeToFirstCrUseCase {
+  Duration call(Map<PullRequest, PullRequestReview?> map) {
+    int size = map.length;
     Duration duration = const Duration();
-    for (PullRequest pr in prList) {
-      duration += pr.createdAt!.difference(pr.closedAt!);
+    for (MapEntry entry in map.entries) {
+      if (entry.value == null) continue;
+      duration += entry.key.createdAt!.difference(entry.value!.submittedAt!);
     }
     final double minutes = duration.inMinutes / size;
     return Duration(minutes: minutes.toInt()).abs();
   }
 }
 
-extension PrDurationExt on Duration {
+extension FirstCrDurationExt on Duration {
   String pretty() {
     String result = "";
     if (inDays > 0) result += "$inDays D";

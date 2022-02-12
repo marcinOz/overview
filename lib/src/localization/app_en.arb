@@ -31,8 +31,24 @@
   "@submit": {
     "description": "Submit"
   },
-  "avgPrLeadTime": "AVG PR Lead Time (since beginning): ",
+  "avgPrLeadTime": "AVG PR Lead Time (since beginning): {value}",
   "@avgPrLeadTime": {
-    "description": "AVG PR Lead Time (since beginning): "
+    "description": "AVG PR Lead Time (since beginning): ",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "4D 21H"
+      }
+    }
+  },
+  "timeToFirstCR": "AVG Time to first CR (since beginning): {value}",
+  "@timeToFirstCR": {
+    "description": "AVG Time to first CR (since beginning): ",
+    "placeholders": {
+      "value": {
+        "type": "String",
+        "example": "18H"
+      }
+    }
   }
 }

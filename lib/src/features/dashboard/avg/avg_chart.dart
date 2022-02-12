@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
@@ -11,9 +9,14 @@ const List<Color> _gradientColors = [
 ];
 
 class AvgChart extends StatelessWidget {
-  const AvgChart({Key? key, required this.prList}) : super(key: key);
+  const AvgChart({
+    Key? key,
+    required this.prList,
+    required this.mapPrsToSpots,
+  }) : super(key: key);
 
   final List<PullRequest> prList;
+  final List<FlSpot> Function(List<PullRequest>) mapPrsToSpots;
 
   @override
   Widget build(BuildContext context) => LineChart(data(prList));
@@ -92,7 +95,7 @@ class AvgChart extends StatelessWidget {
 
   LineChartBarData lineChartBarData(List<PullRequest> prList) {
     return LineChartBarData(
-      spots: getSpotsFromPRs(prList),
+      spots: mapPrsToSpots(prList),
       isCurved: true,
       colors: _gradientColors,
       barWidth: 5,
@@ -105,32 +108,5 @@ class AvgChart extends StatelessWidget {
         colors: _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
       ),
     );
-  }
-
-  List<FlSpot> getSpotsFromPRs(List<PullRequest> prList) {
-    final result = prList.map((pr) {
-      final FlSpot spot = FlSpot(
-        pr.closedAt!.millisecondsSinceEpoch.toDouble(),
-        _getPRLeadTime(prList, pr),
-      );
-      debugPrint(
-          "#ELO month:${DateFormat('yMMMd').format(DateTime.fromMillisecondsSinceEpoch(spot.x.toInt()))} days:${spot.y}");
-      return spot;
-    }).toList();
-    result.sort((a, b) => a.x >= b.x ? 1 : -1);
-    return result;
-  }
-
-  double _getPRLeadTime(List<PullRequest> list, PullRequest pr) {
-    final index = list.indexOf(pr);
-    final List<PullRequest> prList = list.sublist(max(0, index-20), index + 1);
-    int size = prList.length;
-    Duration duration = const Duration();
-    for (PullRequest pr in prList) {
-      duration += pr.createdAt!.difference(pr.closedAt!).abs();
-    }
-    if (duration.inMinutes == 0) return 0;
-    final double minutes = duration.inMinutes / size / 1440;
-    return minutes;
   }
 }
