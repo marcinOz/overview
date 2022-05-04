@@ -14,25 +14,27 @@ class DashboardView extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(title: Text(Loc.of(context).dashboard)),
-        body: Padding(
-          padding: const EdgeInsets.all(Dimensions.paddingL),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ProfileCard(),
-              const SizedBox(width: Dimensions.paddingL),
-              Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  RepositoryNameCard(),
-                  SizedBox(width: Dimensions.paddingL),
-                  AvgPrLeadTimeCard(),
-                  SizedBox(width: Dimensions.paddingL),
-                  AvgTimeToFirstReviewCard(),
-                ],
-              ),
-            ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.paddingL),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ProfileCard(),
+                const SizedBox(width: Dimensions.paddingL),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    RepositoryNameCard(),
+                    SizedBox(width: Dimensions.paddingXL),
+                    AvgPrLeadTimeCard(),
+                    SizedBox(width: Dimensions.paddingXL),
+                    AvgTimeToFirstReviewCard(),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       );

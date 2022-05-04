@@ -8,10 +8,14 @@ import 'package:overview/src/use_case/count_time_to_first_cr_use_case.dart';
 import '../avg_chart.dart';
 
 class AvgTimeToFirstReviewChart extends StatelessWidget {
-  const AvgTimeToFirstReviewChart({Key? key, required this.map})
-      : super(key: key);
+  const AvgTimeToFirstReviewChart({
+    Key? key,
+    required this.map,
+    required this.countHistoryThreshold,
+  }) : super(key: key);
 
   final Map<PullRequest, PullRequestReview?> map;
+  final int countHistoryThreshold;
 
   @override
   Widget build(BuildContext context) => AvgChart(
@@ -22,7 +26,7 @@ class AvgTimeToFirstReviewChart extends StatelessWidget {
   List<FlSpot> getSpotsFromPRs(List<PullRequest> prList) {
     return prList.map((pr) {
       final FlSpot spot = FlSpot(
-        pr.closedAt!.millisecondsSinceEpoch.toDouble(),
+        pr.createdAt!.millisecondsSinceEpoch.toDouble(),
         _getTimeToFirstReviewInDays(prList, pr),
       );
       return spot;
@@ -32,7 +36,7 @@ class AvgTimeToFirstReviewChart extends StatelessWidget {
   double _getTimeToFirstReviewInDays(List<PullRequest> list, PullRequest pr) {
     final index = list.indexOf(pr);
     Map<PullRequest, PullRequestReview?> result = {};
-    for (int i = max(0, index - 20); i < index + 1; i++){
+    for (int i = max(0, index - countHistoryThreshold); i < index + 1; i++) {
       result[map.keys.toList()[i]] = map.values.toList()[i];
     }
     Duration duration = CountTimeToFirstCrUseCase()(result);

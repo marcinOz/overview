@@ -18,6 +18,7 @@ class AvgPrLeadTimeCard extends StatefulWidget {
 
 class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
   final AvgPrLeadTimeCubit _cubit = getIt.get();
+  final int countHistoryThreshold = 20;
 
   @override
   void dispose() {
@@ -33,34 +34,40 @@ class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
             bloc: _cubit,
             builder: (context, state) => Column(
               children: [
-                Row(
-                  children: [
-                    if (state.prList != null) _prLeadTimeText(context, state),
-                    const SizedBox(width: Dimensions.paddingM),
-                    const Text('Below is AVG PR Lead Time for last 20 PRs'),
-                  ],
-                ),
+                if (state.prList != null) _prLeadTimeText(context, state),
+                const SizedBox(height: Dimensions.paddingM),
+                _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
                 if (state.repoName.isNotEmpty &&
                     state.prList?.isNotEmpty != true)
                   const CircularProgressIndicator(),
-                if (state.prList?.isNotEmpty == true)
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingL),
-                    child: SizedBox(
-                      height: 400,
-                      width: MediaQuery.of(context).size.width - 400,
-                      child: AvgPrLeadTimeChart(prList: state.prList!),
-                    ),
-                  ),
+                if (state.prList?.isNotEmpty == true) _chart(context, state),
               ],
             ),
           ),
         ),
       );
 
+  Padding _chart(BuildContext context, AvgState state) => Padding(
+        padding: const EdgeInsets.all(Dimensions.paddingL),
+        child: SizedBox(
+          height: 400,
+          width: MediaQuery.of(context).size.width - 400,
+          child: AvgPrLeadTimeChart(
+            prList: state.prList!,
+            countHistoryThreshold: countHistoryThreshold,
+          ),
+        ),
+      );
+
+  Text _chartDescription(BuildContext context) => Text(
+        context.loc().belowPrLeadTime(countHistoryThreshold),
+        style: context.bodyMediumTextStyle(),
+      );
+
   Text _prLeadTimeText(BuildContext context, AvgState state) => Text(
         Loc.of(context)
             .avgPrLeadTime(CountPrLeadTimeUseCase()(state.prList!).pretty()),
+        style: context.titleSmallTextStyle(),
       );
 }

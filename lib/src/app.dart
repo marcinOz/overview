@@ -5,6 +5,7 @@ import 'package:overview/src/features/dashboard/dashboard_view.dart';
 import 'package:overview/src/features/login/login_view.dart';
 import 'package:overview/src/features/splash/splash_view.dart';
 import 'package:overview/src/github/github_service.dart';
+import 'package:styleguide/styleguide.dart';
 
 import 'features/settings/settings_controller.dart';
 import 'features/settings/settings_view.dart';
@@ -53,20 +54,10 @@ class _MyAppState extends State<MyApp> {
           supportedLocales: const [
             Locale('en', ''), // English, no country code
           ],
-
-          // Use AppLocalizations to configure the correct application title
-          // depending on the user's locale.
-          //
-          // The appTitle is defined in .arb files found in the localization
-          // directory.
           onGenerateTitle: (BuildContext context) =>
               AppLocalizations.of(context)!.appTitle,
-
-          // Define a light and dark color theme. Then, read the user's
-          // preferred ThemeMode (light, dark, or system default) from the
-          // SettingsController to display the correct theme.
-          theme: ThemeData(),
-          darkTheme: ThemeData.dark(),
+          theme: AppThemeData.light().get(),
+          darkTheme: AppThemeData.dark().get(),
           themeMode: widget.settingsController.themeMode,
 
           // Define a function to handle named routes in order to support

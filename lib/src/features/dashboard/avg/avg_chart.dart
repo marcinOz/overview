@@ -81,7 +81,7 @@ class AvgChart extends StatelessWidget {
         fontSize: 15,
       ),
       getTitles: (value) {
-        return '$value D';
+        return '${value.toInt()}D';
       },
       margin: 12,
     );

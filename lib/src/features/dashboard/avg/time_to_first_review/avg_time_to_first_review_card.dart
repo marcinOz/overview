@@ -18,6 +18,7 @@ class AvgTimeToFirstReviewCard extends StatefulWidget {
 
 class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
   final AvgTimeToFirstReviewCubit _cubit = getIt.get();
+  final int countHistoryThreshold = 20;
 
   @override
   void dispose() {
@@ -34,13 +35,9 @@ class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
             bloc: _cubit,
             builder: (context, state) => Column(
               children: [
-                Row(
-                  children: [
-                    if (state.map != null) _prLeadTimeText(context, state),
-                    const SizedBox(width: Dimensions.paddingM),
-                    const Text('Below is AVG PR Lead Time for last 20 PRs'),
-                  ],
-                ),
+                if (state.map != null) _prLeadTimeText(context, state),
+                const SizedBox(height: Dimensions.paddingM),
+                _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
                 if (state.map?.isNotEmpty != true)
                   const CircularProgressIndicator(),
@@ -50,7 +47,10 @@ class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
                     child: SizedBox(
                       height: 400,
                       width: MediaQuery.of(context).size.width - 400,
-                      child: AvgTimeToFirstReviewChart(map: state.map!),
+                      child: AvgTimeToFirstReviewChart(
+                        map: state.map!,
+                        countHistoryThreshold: countHistoryThreshold,
+                      ),
                     ),
                   ),
               ],
@@ -59,13 +59,16 @@ class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
         ),
       );
 
-  Text _prLeadTimeText(
-    BuildContext context,
-    AvgTimeToFirstReviewState state,
-  ) =>
+  Text _chartDescription(BuildContext context) => Text(
+        context.loc().belowTimeToFirstCR(countHistoryThreshold),
+        style: context.bodyMediumTextStyle(),
+      );
+
+  Text _prLeadTimeText(BuildContext context, AvgTimeToFirstReviewState state) =>
       Text(
         Loc.of(context).timeToFirstCR(CountTimeToFirstCrUseCase()(
           state.map!,
         ).pretty()),
+        style: context.titleSmallTextStyle(),
       );
 }

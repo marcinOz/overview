@@ -29,7 +29,10 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
   int prListSize = 0;
 
   @override
-  Future<void> close() async => _subscription.cancel();
+  Future<void> close() async {
+    _subscription.cancel();
+    super.close();
+  }
 
   Future<void> _getReview(PullRequest pr) async {
     (await _githubService.getReviewsFor(pr)).fold(

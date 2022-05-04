@@ -41,6 +41,26 @@
       }
     }
   },
+  "belowPrLeadTime": "Below is AVG PR Lead Time for last {num} PRs",
+  "@belowPrLeadTime": {
+    "description": "Below is AVG PR Lead Time for last PRs",
+    "placeholders": {
+      "num": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
+  "belowTimeToFirstCR": "Below is AVG Time to first CR for last {num} PRs",
+  "@belowTimeToFirstCR": {
+    "description": "Below is AVG Time to first CR PRs",
+    "placeholders": {
+      "num": {
+        "type": "int",
+        "example": "20"
+      }
+    }
+  },
   "timeToFirstCR": "AVG Time to first CR (since beginning): {value}",
   "@timeToFirstCR": {
     "description": "AVG Time to first CR (since beginning): ",

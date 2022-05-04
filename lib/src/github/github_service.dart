@@ -24,7 +24,6 @@ class GithubService {
   }
 
   Future<bool> isAuthenticated() async {
-    if (gitHub.auth?.isAnonymous == false) return true;
     String? token = prefs.getToken();
     if (token == null) return false;
     return (await login(token)).fold(
