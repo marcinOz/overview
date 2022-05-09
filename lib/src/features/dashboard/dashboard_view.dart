@@ -4,6 +4,7 @@ import 'package:overview/src/features/dashboard/avg/time_to_first_review/avg_tim
 import 'package:overview/src/features/dashboard/repo_name/repository_name_card.dart';
 import 'package:overview/src/features/dashboard/widgets/profile_card.dart';
 import 'package:overview/src/localization/localizations.dart';
+import 'package:overview/src/use_case/logout_use_case.dart';
 import 'package:styleguide/styleguide.dart';
 
 class DashboardView extends StatelessWidget {
@@ -13,7 +14,15 @@ class DashboardView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(title: Text(Loc.of(context).dashboard)),
+        appBar: AppBar(
+          title: Text(Loc.of(context).dashboard),
+          actions: [
+            IconButton(
+              onPressed: () => LogoutUseCase()(context),
+              icon: const Icon(Icons.logout),
+            ),
+          ],
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: const EdgeInsets.all(Dimensions.paddingL),

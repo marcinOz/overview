@@ -18,4 +18,6 @@ class SharedPreferences {
   String? getToken() => prefs.getString(tokenKey);
 
   void saveToken(String token) => prefs.setString(tokenKey, token);
+
+  void removeToken() => prefs.remove(tokenKey);
 }

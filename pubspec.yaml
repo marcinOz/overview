@@ -15,14 +15,14 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   intl: ^0.17.0
-  github: ^9.0.0
+  github: ^9.2.0
   flutter_bloc: ^8.0.1
   injectable: ^1.5.3
   get_it: ^7.2.0
   dartz: ^0.10.1
-  extended_image: ^6.0.1
+  extended_image: ^6.0.3
   shared_preferences: ^2.0.13
-  fl_chart: ^0.41.0
+  fl_chart: ^0.50.1
 
   styleguide:
     path: styleguide
@@ -31,7 +31,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: 1.0.4
-  build_runner: ^2.1.7
+  build_runner: ^2.1.10
   injectable_generator: ^1.5.3
 
 flutter:

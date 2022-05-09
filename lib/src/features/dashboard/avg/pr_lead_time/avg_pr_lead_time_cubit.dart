@@ -16,5 +16,8 @@ class AvgPrLeadTimeCubit extends Cubit<AvgState> {
   late final StreamSubscription _subscription;
 
   @override
-  Future<void> close() async => _subscription.cancel();
+  Future<void> close() async {
+    _subscription.cancel();
+    return super.close();
+  }
 }

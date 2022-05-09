@@ -45,6 +45,11 @@ class GithubService {
     }
   }
 
+  void logout() {
+    gitHub.dispose();
+    prefs.removeToken();
+  }
+
   Future<Either<AppError, Unit>> getRepo(
     String owner,
     String name,
@@ -54,7 +59,7 @@ class GithubService {
           await gitHub.repositories.getRepository(RepositorySlug(owner, name));
       currentRepoStream.add(currentRepo);
       return right(unit);
-    } on AccessForbidden catch (e) {
+    } on GitHubError catch (e) {
       return left(AppError(message: e.message!));
     }
   }

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
+import 'package:overview/src/extensions/double_ext.dart';
 import 'package:overview/src/use_case/count_pr_lead_time_use_case.dart';
 
 import '../avg_chart.dart';
@@ -40,6 +41,6 @@ class AvgPrLeadTimeChart extends StatelessWidget {
         list.sublist(max(0, index - countHistoryThreshold), index + 1);
     Duration duration = CountPrLeadTimeUseCase()(prList);
     if (duration.inMinutes == 0) return 0;
-    return duration.inMinutes / 1440;
+    return (duration.inMinutes / 1440).toPrecision(3);
   }
 }

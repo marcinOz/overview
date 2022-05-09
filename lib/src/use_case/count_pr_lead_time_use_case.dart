@@ -2,6 +2,8 @@ import 'package:github/github.dart';
 
 class CountPrLeadTimeUseCase {
   Duration call(List<PullRequest> prList) {
+    if (prList.isEmpty) return Duration.zero;
+
     int size = prList.length;
     Duration duration = const Duration();
     for (PullRequest pr in prList) {

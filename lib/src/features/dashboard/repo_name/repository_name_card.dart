@@ -19,8 +19,8 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
 
   @override
   void initState() {
-    const prefillOwner = 'talabat-dhme';
-    const prefillRepo = 'tlb-flutter-marshmallow';
+    const prefillOwner = 'netguru';
+    const prefillRepo = 'cashcow-flutter';
     _ownerEditingController.text = prefillOwner;
     _cubit.onOwnerChanged(prefillOwner);
     _repoEditingController.text = prefillRepo;

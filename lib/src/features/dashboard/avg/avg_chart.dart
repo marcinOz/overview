@@ -28,9 +28,24 @@ class AvgChart extends StatelessWidget {
       borderData: flBorderData(),
       minY: 0,
       maxY: 10,
+      lineTouchData: _tooltipsData(),
       lineBarsData: [
         lineChartBarData(prList),
       ],
+    );
+  }
+
+  LineTouchData _tooltipsData() {
+    return LineTouchData(
+      touchTooltipData: LineTouchTooltipData(
+        tooltipBgColor: Colors.white,
+        getTooltipItems: (spots) => spots
+            .map((e) => LineTooltipItem(
+                  '${e.y} days',
+                  const TextStyle(color: Colors.black),
+                ))
+            .toList(),
+      ),
     );
   }
 
@@ -48,42 +63,50 @@ class AvgChart extends StatelessWidget {
   FlTitlesData flTitlesData() {
     return FlTitlesData(
       show: true,
-      rightTitles: SideTitles(showTitles: false),
-      topTitles: SideTitles(showTitles: false),
+      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       bottomTitles: bottomTitles(),
       leftTitles: leftTitles(),
     );
   }
 
-  SideTitles bottomTitles() {
-    return SideTitles(
-      showTitles: true,
-      reservedSize: 22,
-      interval: 5259600000,
-      getTextStyles: (context, value) => const TextStyle(
-        color: Color(0xff68737d),
-        fontWeight: FontWeight.bold,
-        fontSize: 16,
+  AxisTitles bottomTitles() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+        showTitles: true,
+        reservedSize: 22,
+        interval: 5259600000,
+        getTitlesWidget: (value, titleMeta) => Padding(
+          padding: const EdgeInsets.only(left: 8.0),
+          child: Text(
+            DateFormat('MMM')
+                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt())),
+            style: const TextStyle(
+              color: Color(0xff68737d),
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+        ),
       ),
-      getTitles: (value) => DateFormat('MMM')
-          .format(DateTime.fromMillisecondsSinceEpoch(value.toInt())),
-      margin: 8,
     );
   }
 
-  SideTitles leftTitles() {
-    return SideTitles(
-      showTitles: true,
-      interval: 1,
-      getTextStyles: (context, value) => const TextStyle(
-        color: Color(0xff67727d),
-        fontWeight: FontWeight.bold,
-        fontSize: 15,
+  AxisTitles leftTitles() {
+    return AxisTitles(
+      sideTitles: SideTitles(
+        reservedSize: 30,
+        showTitles: true,
+        interval: 1,
+        getTitlesWidget: (value, titleMeta) => Text(
+          '${value.toInt()}D',
+          style: const TextStyle(
+            color: Color(0xff67727d),
+            fontWeight: FontWeight.bold,
+            fontSize: 15,
+          ),
+        ),
       ),
-      getTitles: (value) {
-        return '${value.toInt()}D';
-      },
-      margin: 12,
     );
   }
 
@@ -96,16 +119,17 @@ class AvgChart extends StatelessWidget {
   LineChartBarData lineChartBarData(List<PullRequest> prList) {
     return LineChartBarData(
       spots: mapPrsToSpots(prList),
-      isCurved: true,
-      colors: _gradientColors,
+      isCurved: false,
+      gradient: const LinearGradient(colors: _gradientColors),
       barWidth: 5,
       isStrokeCapRound: true,
-      dotData: FlDotData(
-        show: false,
-      ),
+      dotData: FlDotData(show: false),
       belowBarData: BarAreaData(
         show: true,
-        colors: _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+        gradient: LinearGradient(
+          colors:
+              _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+        ),
       ),
     );
   }
