@@ -23,7 +23,7 @@ class RepositoryNameCubit extends Cubit<RepositoryNameState> {
       return;
     }
     emit(state.copyWith(isLoading: true));
-    (await _githubService.getRepo(state.owner!, state.name!)).fold(
+    (await _githubService.getRepository(state.owner!, state.name!)).fold(
       (error) => emit(state.copyWith(error: error)),
       (r) => emit(state.copyWith()),
     );

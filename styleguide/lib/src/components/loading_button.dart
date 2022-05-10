@@ -27,11 +27,15 @@ class LoadingButton extends StatelessWidget {
           if (isLoading)
             const Positioned(
               top: Dimensions.paddingXS,
-              left: Dimensions.paddingL,
-              right: Dimensions.paddingL,
-              child: SizedBox(
-                height: 20,
-                child: CircularProgressIndicator(),
+              left: 0,
+              right: 0,
+              child: Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: 20,
+                  height: 20,
+                  child: CircularProgressIndicator(),
+                ),
               ),
             ),
         ],

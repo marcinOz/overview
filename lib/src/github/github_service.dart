@@ -50,7 +50,7 @@ class GithubService {
     prefs.removeToken();
   }
 
-  Future<Either<AppError, Unit>> getRepo(
+  Future<Either<AppError, Unit>> getRepository(
     String owner,
     String name,
   ) async {
@@ -64,7 +64,7 @@ class GithubService {
     }
   }
 
-  Future<Either<AppError, List<PullRequest>>> getPRs() async {
+  Future<Either<AppError, List<PullRequest>>> getClosedPRs() async {
     try {
       final prList = (await gitHub.pullRequests
           .list(

@@ -61,7 +61,7 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
                   ),
                   const SizedBox(width: Dimensions.paddingM),
                   SizedBox(
-                    width: 200,
+                    width: 300,
                     child: TextField(
                       controller: _repoEditingController,
                       decoration: InputDecoration(

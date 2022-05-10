@@ -28,7 +28,7 @@ class AvgCubit extends Cubit<AvgState> {
   }
 
   Future<void> _getPRs() async {
-    (await _service.getPRs()).fold(
+    (await _service.getClosedPRs()).fold(
       (l) => null,
       (prList) {
         prList.sort((a, b) => a.createdAt!.isBefore(b.createdAt!) ? 1 : -1);

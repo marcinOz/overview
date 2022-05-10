@@ -8,7 +8,7 @@ const List<Color> _gradientColors = [
   Color(0xff02d39a),
 ];
 
-class AvgChart extends StatelessWidget {
+class AvgChart extends StatefulWidget {
   const AvgChart({
     Key? key,
     required this.prList,
@@ -19,29 +19,33 @@ class AvgChart extends StatelessWidget {
   final List<FlSpot> Function(List<PullRequest>) mapPrsToSpots;
 
   @override
-  Widget build(BuildContext context) => LineChart(data(prList));
+  State<AvgChart> createState() => _AvgChartState();
+}
 
-  LineChartData data(List<PullRequest> prList) {
-    return LineChartData(
-      gridData: flGridData(),
-      titlesData: flTitlesData(),
-      borderData: flBorderData(),
-      minY: 0,
-      maxY: 10,
-      lineTouchData: _tooltipsData(),
-      lineBarsData: [
-        lineChartBarData(prList),
-      ],
-    );
-  }
+class _AvgChartState extends State<AvgChart> {
+  String _bottomCurrentVal = "";
+
+  @override
+  Widget build(BuildContext context) => LineChart(
+        LineChartData(
+          gridData: _flGridData(),
+          titlesData: _flTitlesData(),
+          borderData: _flBorderData(),
+          minY: 0,
+          lineTouchData: _tooltipsData(),
+          lineBarsData: [
+            _lineChartBarData(widget.prList),
+          ],
+        ),
+      );
 
   LineTouchData _tooltipsData() {
     return LineTouchData(
       touchTooltipData: LineTouchTooltipData(
         tooltipBgColor: Colors.white,
         getTooltipItems: (spots) => spots
-            .map((e) => LineTooltipItem(
-                  '${e.y} days',
+            .map((s) => LineTooltipItem(
+                  'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
                   const TextStyle(color: Colors.black),
                 ))
             .toList(),
@@ -49,7 +53,7 @@ class AvgChart extends StatelessWidget {
     );
   }
 
-  FlGridData flGridData() {
+  FlGridData _flGridData() {
     return FlGridData(
       show: true,
       drawVerticalLine: true,
@@ -60,65 +64,74 @@ class AvgChart extends StatelessWidget {
     );
   }
 
-  FlTitlesData flTitlesData() {
+  FlTitlesData _flTitlesData() {
     return FlTitlesData(
       show: true,
       rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
       topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      bottomTitles: bottomTitles(),
-      leftTitles: leftTitles(),
+      bottomTitles: _bottomTitles(),
+      leftTitles: _leftTitles(),
     );
   }
 
-  AxisTitles bottomTitles() {
+  AxisTitles _bottomTitles() {
     return AxisTitles(
       sideTitles: SideTitles(
-        showTitles: true,
-        reservedSize: 22,
-        interval: 5259600000,
-        getTitlesWidget: (value, titleMeta) => Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            DateFormat('MMM')
-                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt())),
-            style: const TextStyle(
-              color: Color(0xff68737d),
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-        ),
-      ),
+          showTitles: true,
+          reservedSize: 22,
+          interval: 5259600000,
+          getTitlesWidget: (value, titleMeta) {
+            final title = DateFormat('MMM')
+                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
+
+            if (_bottomCurrentVal == title) return const SizedBox();
+
+            _bottomCurrentVal = title;
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xff68737d),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+            );
+          }),
     );
   }
 
-  AxisTitles leftTitles() {
+  AxisTitles _leftTitles() {
     return AxisTitles(
+      drawBehindEverything: true,
       sideTitles: SideTitles(
         reservedSize: 30,
         showTitles: true,
         interval: 1,
-        getTitlesWidget: (value, titleMeta) => Text(
-          '${value.toInt()}D',
-          style: const TextStyle(
-            color: Color(0xff67727d),
-            fontWeight: FontWeight.bold,
-            fontSize: 15,
-          ),
-        ),
+        getTitlesWidget: (value, titleMeta) => _isNotCompleteNumber(value)
+            ? const SizedBox()
+            : Text(
+                '${value.toInt()}D',
+                style: const TextStyle(
+                  color: Color(0xff67727d),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                ),
+              ),
       ),
     );
   }
 
-  FlBorderData flBorderData() {
+  FlBorderData _flBorderData() {
     return FlBorderData(
         show: true,
         border: Border.all(color: const Color(0xff37434d), width: 1));
   }
 
-  LineChartBarData lineChartBarData(List<PullRequest> prList) {
+  LineChartBarData _lineChartBarData(List<PullRequest> prList) {
     return LineChartBarData(
-      spots: mapPrsToSpots(prList),
+      spots: widget.mapPrsToSpots(prList),
       isCurved: false,
       gradient: const LinearGradient(colors: _gradientColors),
       barWidth: 5,
@@ -133,4 +146,6 @@ class AvgChart extends StatelessWidget {
       ),
     );
   }
+
+  bool _isNotCompleteNumber(double value) => value - value.toInt() > 0;
 }
