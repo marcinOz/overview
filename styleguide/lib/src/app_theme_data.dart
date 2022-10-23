@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:styleguide/src/app_colors.dart';
 import 'package:styleguide/src/dimensions.dart';
@@ -28,6 +26,8 @@ class AppThemeData {
 
 extension ThemeExt on BuildContext {
   Color primaryColor() => Theme.of(this).primaryColor;
+
+  Color bgColor() => Theme.of(this).scaffoldBackgroundColor;
 
   TextStyle titleSmallTextStyle() => Theme.of(this).textTheme.titleSmall!;
 

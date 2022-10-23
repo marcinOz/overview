@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:overview/src/features/dashboard/avg/pr_lead_time/avg_pr_lead_time_card.dart';
 import 'package:overview/src/features/dashboard/avg/time_to_first_review/avg_time_to_first_review_card.dart';
 import 'package:overview/src/features/dashboard/repo_name/repository_name_card.dart';
+import 'package:overview/src/features/dashboard/repos_list/repositories_list.dart';
 import 'package:overview/src/features/dashboard/widgets/profile_card.dart';
 import 'package:overview/src/localization/localizations.dart';
 import 'package:overview/src/use_case/logout_use_case.dart';
@@ -29,7 +30,12 @@ class DashboardView extends StatelessWidget {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ProfileCard(),
+                Column(
+                  children: [
+                    ProfileCard(),
+                    const RepositoriesList(),
+                  ],
+                ),
                 const SizedBox(width: Dimensions.paddingL),
                 Column(
                   mainAxisSize: MainAxisSize.min,
