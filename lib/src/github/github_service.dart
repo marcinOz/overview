@@ -64,6 +64,16 @@ class GithubService {
     }
   }
 
+  Future<Either<AppError, List<Repository>>> getAllRepositories() async {
+    try {
+      List<Repository> list =
+          await gitHub.repositories.listRepositories(type: 'all').toList();
+      return right(list);
+    } on GitHubError catch (e) {
+      return left(AppError(message: e.message!));
+    }
+  }
+
   Future<Either<AppError, List<PullRequest>>> getClosedPRs() async {
     try {
       final prList = (await gitHub.pullRequests

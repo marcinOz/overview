@@ -3,11 +3,15 @@ import 'package:injectable/injectable.dart';
 import 'package:overview/src/error/app_error.dart';
 import 'package:overview/src/github/github_service.dart';
 
-@Injectable()
+@Singleton()
 class RepositoryNameCubit extends Cubit<RepositoryNameState> {
   RepositoryNameCubit(this._githubService) : super(const RepositoryNameState());
 
   final GithubService _githubService;
+
+  void fillUpFromClick(String owner, String name) {
+    emit(state.copyWith(owner: owner, name: name));
+  }
 
   void onOwnerChanged(String owner) {
     emit(state.copyWith(owner: owner));

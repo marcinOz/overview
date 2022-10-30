@@ -12,14 +12,7 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
     this._avgCubit,
     this._githubService,
   ) : super(const AvgTimeToFirstReviewState()) {
-    _subscription = _avgCubit.stream.listen((event) {
-      if (event.prList == null) return;
-      map = event.prList!.asMap().map((key, value) => MapEntry(value, null));
-      prListSize = event.prList!.length;
-      for (var element in event.prList!) {
-        _getReview(element);
-      }
-    });
+    _subscription = _avgCubit.stream.listen(_onAvgCubitEvent);
   }
 
   final AvgCubit _avgCubit;
@@ -32,6 +25,15 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
   Future<void> close() async {
     _subscription.cancel();
     super.close();
+  }
+
+  void _onAvgCubitEvent(AvgState event) {
+    if (event.prList == null) return;
+    map = event.prList!.asMap().map((key, value) => MapEntry(value, null));
+    prListSize = event.prList!.length;
+    for (var element in event.prList!) {
+      _getReview(element);
+    }
   }
 
   Future<void> _getReview(PullRequest pr) async {

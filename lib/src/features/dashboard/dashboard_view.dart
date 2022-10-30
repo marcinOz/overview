@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:overview/src/features/dashboard/avg/pr_lead_time/avg_pr_lead_time_card.dart';
+import 'package:overview/src/features/dashboard/avg/pr_number/avg_pr_number_card.dart';
 import 'package:overview/src/features/dashboard/avg/time_to_first_review/avg_time_to_first_review_card.dart';
 import 'package:overview/src/features/dashboard/repo_name/repository_name_card.dart';
 import 'package:overview/src/features/dashboard/repos_list/repositories_list.dart';
@@ -21,31 +22,35 @@ class DashboardView extends StatelessWidget {
             IconButton(
               onPressed: () => LogoutUseCase()(context),
               icon: const Icon(Icons.logout),
+              tooltip: context.loc().signOut,
             ),
           ],
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(Dimensions.paddingL),
+            padding: const EdgeInsets.all(Dimensions.paddingM),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(
                   children: [
                     ProfileCard(),
+                    const SizedBox(height: Dimensions.paddingM),
                     const RepositoriesList(),
                   ],
                 ),
-                const SizedBox(width: Dimensions.paddingL),
+                const SizedBox(width: Dimensions.paddingM),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
                     RepositoryNameCard(),
-                    SizedBox(width: Dimensions.paddingXL),
+                    SizedBox(height: Dimensions.paddingM),
                     AvgPrLeadTimeCard(),
-                    SizedBox(width: Dimensions.paddingXL),
+                    SizedBox(height: Dimensions.paddingM),
                     AvgTimeToFirstReviewCard(),
+                    SizedBox(height: Dimensions.paddingM),
+                    AvgPrNumberCard(),
                   ],
                 ),
               ],

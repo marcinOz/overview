@@ -12,7 +12,7 @@ class AvgTimeToFirstReviewCard extends StatefulWidget {
   const AvgTimeToFirstReviewCard({Key? key}) : super(key: key);
 
   @override
-  _AvgTimeToFirstReviewCardState createState() =>
+  State<AvgTimeToFirstReviewCard> createState() =>
       _AvgTimeToFirstReviewCardState();
 }
 
@@ -46,7 +46,7 @@ class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
                     padding: const EdgeInsets.all(Dimensions.paddingL),
                     child: SizedBox(
                       height: 400,
-                      width: MediaQuery.of(context).size.width - 400,
+                      width: MediaQuery.of(context).size.width - 264,
                       child: AvgTimeToFirstReviewChart(
                         map: state.map!,
                         countHistoryThreshold: countHistoryThreshold,
