@@ -18,17 +18,6 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
   final TextEditingController _repoEditingController = TextEditingController();
 
   @override
-  void initState() {
-    const prefillOwner = 'netguru';
-    const prefillRepo = 'mobile-security-checklist';
-    _ownerEditingController.text = prefillOwner;
-    _cubit.onOwnerChanged(prefillOwner);
-    _repoEditingController.text = prefillRepo;
-    _cubit.onNameChanged(prefillRepo);
-    super.initState();
-  }
-
-  @override
   void dispose() {
     _cubit.close();
     super.dispose();
@@ -85,6 +74,12 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
       BlocConsumer<RepositoryNameCubit, RepositoryNameState>(
         bloc: _cubit,
         listener: (context, state) {
+          if (_ownerEditingController.text != state.owner) {
+            _ownerEditingController.text = state.owner ?? '';
+          }
+          if (_repoEditingController.text != state.name) {
+            _repoEditingController.text = state.name ?? '';
+          }
           if (state.error != null) {
             showErrorDialog(context, state.error!.message);
           }

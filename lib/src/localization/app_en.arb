@@ -15,6 +15,10 @@
   "@signIn": {
     "description": "SignIn"
   },
+  "signOut": "SignOut",
+  "@signOut": {
+    "description": "SignOut"
+  },
   "owner": "Owner",
   "@owner": {
     "description": "Owner"
@@ -70,5 +74,20 @@
         "example": "18H"
       }
     }
+  },
+  "prNumber": "AVG Number of PRs in week per person: {value}",
+  "@prNumber": {
+    "description": "AVG Number of PRs in week per person: ",
+    "placeholders": {
+      "value": {
+        "type": "double",
+        "format": "decimalPattern",
+        "example": "5"
+      }
+    }
+  },
+  "belowAvgPrNumber": "Below is AVG PR number in week per person",
+  "@belowAvgPrNumber": {
+    "description": "Below is AVG PR number in week per person"
   }
 }
