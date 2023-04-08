@@ -10,17 +10,18 @@ import 'package:overview/src/error/app_error.dart';
 class GithubService {
   GithubService(this.prefs) {
     gitHub = GitHub(auth: findAuthenticationFromEnvironment());
-    currentRepoStream = StreamController();
+    _currentRepoStream = StreamController();
   }
 
   final SharedPreferences prefs;
   late GitHub gitHub;
   User? user;
   late Repository currentRepo;
-  late final StreamController<Repository> currentRepoStream;
+  late final StreamController<Repository> _currentRepoStream;
+  Stream<Repository> get currentRepoStream => _currentRepoStream.stream;
 
   void dispose() {
-    currentRepoStream.close();
+    _currentRepoStream.close();
   }
 
   Future<bool> isAuthenticated() async {
@@ -57,7 +58,7 @@ class GithubService {
     try {
       currentRepo =
           await gitHub.repositories.getRepository(RepositorySlug(owner, name));
-      currentRepoStream.add(currentRepo);
+      _currentRepoStream.add(currentRepo);
       return right(unit);
     } on GitHubError catch (e) {
       return left(AppError(message: e.message!));

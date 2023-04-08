@@ -1,30 +1,28 @@
 # overview
 
-A new Flutter project.
+Developer Statistics Overview is a mobile application built with Flutter that allows developers to track and analyze their performance on various developer platforms, including Github, Stack Overflow, and more.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/docs/development/data-and-backend/state-mgmt/simple).
+The application allows developers to:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Connect to their Github account and track their commits, pull requests, issues, and more
+- Connect to their Stack Overflow account and track their reputation, badges, and more
+- View their activity across other developer platforms, including Bitbucket, GitLab, and Jira
+- Analyze their performance over time with charts and graphs
+- Set goals and track their progress towards those goals
+- Receive notifications when they reach milestones or achieve their goals
 
-## Assets
+## How to run the application
 
-The `assets` directory houses images, fonts, and any other files you want to
-include with your application.
+To run the application locally, you will need to have Flutter installed on your computer.
 
-The `assets/images` directory contains [resolution-aware
-images](https://flutter.dev/docs/development/ui/assets-and-images#resolution-aware).
+1. Clone this repository to your local machine
+2. Navigate to the root directory of the project in your terminal
+3. Run `flutter pub get` to install all necessary dependencies
+4. Connect your Android or iOS device to your computer
+5. Run `flutter run` to start the application
 
-## Localization
+## License
 
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
-
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter
-apps](https://flutter.dev/docs/development/accessibility-and-localization/internationalization)
+This project is licensed under the MIT License. See the LICENSE file for more information.

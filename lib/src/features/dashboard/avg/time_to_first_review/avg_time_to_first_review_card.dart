@@ -39,22 +39,23 @@ class _AvgTimeToFirstReviewCardState extends State<AvgTimeToFirstReviewCard> {
                 const SizedBox(height: Dimensions.paddingM),
                 _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
-                if (state.map?.isNotEmpty != true)
-                  const CircularProgressIndicator(),
-                if (state.map?.isNotEmpty == true)
-                  Padding(
-                    padding: const EdgeInsets.all(Dimensions.paddingL),
-                    child: SizedBox(
-                      height: 400,
-                      width: MediaQuery.of(context).size.width - 264,
-                      child: AvgTimeToFirstReviewChart(
-                        map: state.map!,
-                        countHistoryThreshold: countHistoryThreshold,
-                      ),
-                    ),
-                  ),
+                if (state.isLoading) const CircularProgressIndicator(),
+                if (state.map?.isNotEmpty == true) _chart(context, state),
               ],
             ),
+          ),
+        ),
+      );
+
+  Padding _chart(BuildContext context, AvgTimeToFirstReviewState state) =>
+      Padding(
+        padding: const EdgeInsets.all(Dimensions.paddingL),
+        child: SizedBox(
+          height: 400,
+          width: MediaQuery.of(context).size.width - 264,
+          child: AvgTimeToFirstReviewChart(
+            map: state.map!,
+            countHistoryThreshold: countHistoryThreshold,
           ),
         ),
       );

@@ -5,9 +5,8 @@ import 'package:overview/src/localization/localizations.dart';
 import 'package:overview/src/use_case/count_pr_lead_time_use_case.dart';
 import 'package:styleguide/styleguide.dart';
 
-import '../avg_cubit.dart';
+import '../pr_list_data_cubit.dart';
 import 'avg_pr_lead_time_chart.dart';
-import 'avg_pr_lead_time_cubit.dart';
 
 class AvgPrLeadTimeCard extends StatefulWidget {
   const AvgPrLeadTimeCard({Key? key}) : super(key: key);
@@ -17,7 +16,7 @@ class AvgPrLeadTimeCard extends StatefulWidget {
 }
 
 class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
-  final AvgPrLeadTimeCubit _cubit = getIt.get();
+  final PRListDataCubit _cubit = getIt.get();
   final int countHistoryThreshold = 20;
 
   @override
@@ -30,7 +29,7 @@ class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
   Widget build(BuildContext context) => AppCard(
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.paddingM),
-          child: BlocBuilder<AvgPrLeadTimeCubit, AvgState>(
+          child: BlocBuilder<PRListDataCubit, PRListState>(
             bloc: _cubit,
             builder: (context, state) => Column(
               children: [
@@ -38,8 +37,7 @@ class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
                 const SizedBox(height: Dimensions.paddingM),
                 _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
-                if (state.repoName.isNotEmpty &&
-                    state.prList?.isNotEmpty != true)
+                if (state.isLoading)
                   const CircularProgressIndicator(),
                 if (state.prList?.isNotEmpty == true) _chart(context, state),
               ],
@@ -48,7 +46,7 @@ class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
         ),
       );
 
-  Padding _chart(BuildContext context, AvgState state) => Padding(
+  Padding _chart(BuildContext context, PRListState state) => Padding(
         padding: const EdgeInsets.all(Dimensions.paddingL),
         child: SizedBox(
           height: 400,
@@ -65,7 +63,7 @@ class _AvgPrLeadTimeCardState extends State<AvgPrLeadTimeCard> {
         style: context.bodyMediumTextStyle(),
       );
 
-  Text _prLeadTimeText(BuildContext context, AvgState state) => Text(
+  Text _prLeadTimeText(BuildContext context, PRListState state) => Text(
         Loc.of(context)
             .avgPrLeadTime(CountPrLeadTimeUseCase()(state.prList!).pretty()),
         style: context.titleSmallTextStyle(),
