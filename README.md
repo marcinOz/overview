@@ -2,6 +2,9 @@
 
 Developer Statistics Overview is a mobile application built with Flutter that allows developers to track and analyze their performance on various developer platforms, including Github, Stack Overflow, and more.
 
+## Links
+- [code coverage](https://marcinoz.github.io/overview/)
+
 ## Features
 
 The application allows developers to:
@@ -25,4 +28,4 @@ To run the application locally, you will need to have Flutter installed on your 
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for more information.
+This project is licensed under the Apache License 2.0. See the LICENSE file for more information.
