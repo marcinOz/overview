@@ -11,9 +11,10 @@ import 'package:overview/src/features/dashboard/avg/pr_list_data_cubit.dart';
 import 'package:overview/src/features/dashboard/avg/time_to_first_review/avg_time_to_first_review_cubit.dart';
 import 'package:overview/src/github/github_service.dart';
 
+import '../../../../mocks/nice_mocks.mocks.dart';
 import 'avg_time_to_first_review_cubit_test.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<PRListDataCubit>(), MockSpec<GithubService>()])
+@GenerateNiceMocks([MockSpec<PRListDataCubit>()])
 void main() {
   late PRListDataCubit mockPRListDataCubit;
   late GithubService mockGithubService;

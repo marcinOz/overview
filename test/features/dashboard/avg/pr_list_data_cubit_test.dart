@@ -4,14 +4,12 @@ import 'package:bloc_test/bloc_test.dart';
 import 'package:dartz/dartz.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:github/github.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:overview/src/error/app_error.dart';
 import 'package:overview/src/features/dashboard/avg/pr_list_data_cubit.dart';
 import 'package:overview/src/github/github_service.dart';
 
-@GenerateNiceMocks([MockSpec<GithubService>()])
-import 'pr_list_data_cubit_test.mocks.dart';
+import '../../../mocks/nice_mocks.mocks.dart';
 
 void main() {
   late GithubService mockService;

@@ -1,12 +1,10 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:github/github.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:overview/src/use_case/count_pr_lead_time_use_case.dart';
 
-import 'count_pr_lead_time_use_case_test.mocks.dart';
+import '../mocks/nice_mocks.mocks.dart';
 
-@GenerateNiceMocks([MockSpec<PullRequest>()])
 void main() {
   late CountPrLeadTimeUseCase useCase;
   late List<PullRequest> mockPrList;

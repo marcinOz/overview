@@ -2,6 +2,7 @@ import 'package:github/github.dart';
 
 class CountTimeToFirstCrUseCase {
   Duration call(Map<PullRequest, PullRequestReview?> map) {
+    if (map.isEmpty) return const Duration();
     int size = map.length;
     Duration duration = const Duration();
     for (MapEntry entry in map.entries) {

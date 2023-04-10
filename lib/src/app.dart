@@ -11,7 +11,6 @@ import 'features/settings/settings_controller.dart';
 import 'features/settings/settings_view.dart';
 import 'injectable/injectable.dart';
 
-/// The Widget that configures your application.
 class MyApp extends StatefulWidget {
   const MyApp({
     Key? key,
