@@ -39,113 +39,101 @@ class _AvgChartState extends State<AvgChart> {
         ),
       );
 
-  LineTouchData _tooltipsData() {
-    return LineTouchData(
-      touchTooltipData: LineTouchTooltipData(
-        tooltipBgColor: Colors.white,
-        getTooltipItems: (spots) => spots
-            .map((s) => LineTooltipItem(
-                  'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
-                  const TextStyle(color: Colors.black),
-                ))
-            .toList(),
-      ),
-    );
-  }
-
-  FlGridData _flGridData() {
-    return FlGridData(
-      show: true,
-      drawVerticalLine: true,
-      getDrawingHorizontalLine: (value) =>
-          FlLine(color: const Color(0xff37434d), strokeWidth: 1),
-      getDrawingVerticalLine: (value) =>
-          FlLine(color: const Color(0xff37434d), strokeWidth: 1),
-    );
-  }
-
-  FlTitlesData _flTitlesData() {
-    return FlTitlesData(
-      show: true,
-      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-      bottomTitles: _bottomTitles(),
-      leftTitles: _leftTitles(),
-    );
-  }
-
-  AxisTitles _bottomTitles() {
-    return AxisTitles(
-      sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          interval: 5259600000,
-          getTitlesWidget: (value, titleMeta) {
-            final title = DateFormat('MMM')
-                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
-
-            if (_bottomCurrentVal == title) return const SizedBox();
-
-            _bottomCurrentVal = title;
-            return Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xff68737d),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            );
-          }),
-    );
-  }
-
-  AxisTitles _leftTitles() {
-    return AxisTitles(
-      drawBehindEverything: true,
-      sideTitles: SideTitles(
-        reservedSize: 30,
-        showTitles: true,
-        interval: 1,
-        getTitlesWidget: (value, titleMeta) => _isNotCompleteNumber(value)
-            ? const SizedBox()
-            : Text(
-                '${value.toInt()}D',
-                style: const TextStyle(
-                  color: Color(0xff67727d),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15,
-                ),
-              ),
-      ),
-    );
-  }
-
-  FlBorderData _flBorderData() {
-    return FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d), width: 1));
-  }
-
-  LineChartBarData _lineChartBarData(List<PullRequest> prList) {
-    return LineChartBarData(
-      spots: widget.mapPrsToSpots(prList),
-      isCurved: false,
-      gradient: const LinearGradient(colors: _gradientColors),
-      barWidth: 5,
-      isStrokeCapRound: true,
-      dotData: FlDotData(show: false),
-      belowBarData: BarAreaData(
-        show: true,
-        gradient: LinearGradient(
-          colors:
-              _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+  LineTouchData _tooltipsData() => LineTouchData(
+        touchTooltipData: LineTouchTooltipData(
+          tooltipBgColor: Colors.white,
+          getTooltipItems: (spots) => spots
+              .map((s) => LineTooltipItem(
+                    'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
+                    const TextStyle(color: Colors.black),
+                  ))
+              .toList(),
         ),
-      ),
-    );
-  }
+      );
+
+  FlGridData _flGridData() => FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        getDrawingHorizontalLine: (value) =>
+            FlLine(color: const Color(0xff37434d), strokeWidth: 1),
+        getDrawingVerticalLine: (value) =>
+            FlLine(color: const Color(0xff37434d), strokeWidth: 1),
+      );
+
+  FlTitlesData _flTitlesData() => FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        bottomTitles: _bottomTitles(),
+        leftTitles: _leftTitles(),
+      );
+
+  AxisTitles _bottomTitles() => AxisTitles(
+        sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 22,
+            interval: 5259600000,
+            getTitlesWidget: (value, titleMeta) {
+              final title = DateFormat('MMM')
+                  .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
+
+              if (_bottomCurrentVal == title) return const SizedBox();
+
+              _bottomCurrentVal = title;
+              return Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    color: Color(0xff68737d),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              );
+            }),
+      );
+
+  AxisTitles _leftTitles() => AxisTitles(
+        drawBehindEverything: true,
+        sideTitles: SideTitles(
+          reservedSize: 30,
+          showTitles: true,
+          interval: 1,
+          getTitlesWidget: (value, titleMeta) => _isNotCompleteNumber(value)
+              ? const SizedBox()
+              : Text(
+                  '${value.toInt()}D',
+                  style: const TextStyle(
+                    color: Color(0xff67727d),
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15,
+                  ),
+                ),
+        ),
+      );
+
+  FlBorderData _flBorderData() => FlBorderData(
+        show: true,
+        border: Border.all(color: const Color(0xff37434d), width: 1),
+      );
+
+  LineChartBarData _lineChartBarData(List<PullRequest> prList) =>
+      LineChartBarData(
+        spots: widget.mapPrsToSpots(prList),
+        isCurved: false,
+        gradient: const LinearGradient(colors: _gradientColors),
+        barWidth: 5,
+        isStrokeCapRound: true,
+        dotData: FlDotData(show: false),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            colors:
+                _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
+          ),
+        ),
+      );
 
   bool _isNotCompleteNumber(double value) => value - value.toInt() > 0;
 }
