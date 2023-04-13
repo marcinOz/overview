@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github/github.dart';
 import 'package:injectable/injectable.dart';
@@ -39,26 +38,18 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
     for (var element in event.prList!) {
       _getReview(element);
     }
-    // There was no reviews or error occurred
-    if (state.isLoading) {
-      emit(AvgTimeToFirstReviewState(map));
-    }
   }
 
   Future<void> _getReview(PullRequest pr) async {
     (await _githubService.getReviewsFor(pr)).fold(
-      (l) => null,
+      (l) => emit(AvgTimeToFirstReviewState(map)),
       (allReviews) {
-        if (allReviews.isEmpty) {
-          map[pr] = null;
-          return;
+        if (allReviews.isNotEmpty) {
+          map[pr] = allReviews.reduce(
+            (a, b) => a.submittedAt!.isBefore(b.submittedAt!) ? a : b,
+          );
         }
-        map[pr] = allReviews.reduce(
-          (a, b) => a.submittedAt!.isBefore(b.submittedAt!) ? a : b,
-        );
-        if (map.length == prListSize) {
-          emit(AvgTimeToFirstReviewState(map));
-        }
+        emit(AvgTimeToFirstReviewState(map));
       },
     );
   }
@@ -72,24 +63,4 @@ class AvgTimeToFirstReviewState {
 
   final bool isLoading;
   final Map<PullRequest, PullRequestReview?>? map;
-
-  @override
-  String toString() {
-    return '''AvgTimeToFirstReviewState{
-    map: $map, 
-    isLoading: $isLoading
-    }''';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is AvgTimeToFirstReviewState &&
-        mapEquals(other.map, map) &&
-        other.isLoading == isLoading;
-  }
-
-  @override
-  int get hashCode => map.hashCode ^ isLoading.hashCode;
 }

@@ -108,6 +108,8 @@ class GithubService {
       return right(prList);
     } on AccessForbidden catch (e) {
       return left(AppError(message: e.message!));
+    } catch (e) {
+      return left(AppError(message: e.toString()));
     }
   }
 }

@@ -56,8 +56,14 @@ void main() {
         ..add(const PRListState(isLoading: true))
         ..add(PRListState(prList: prList)),
       expect: () => [
-        const AvgTimeToFirstReviewState(null, true),
-        AvgTimeToFirstReviewState({pr: prReview}),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(true))
+            .having((state) => state.map, 'map', equals(null)),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(true))
+            .having((state) => state.map, 'map', equals(null)),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.map, 'map', equals({pr: prReview})),
       ],
     );
 
@@ -70,8 +76,12 @@ void main() {
         ..add(const PRListState(isLoading: true))
         ..add(const PRListState(prList: null)),
       expect: () => [
-        const AvgTimeToFirstReviewState(null, true),
-        const AvgTimeToFirstReviewState(null, false),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(true))
+            .having((state) => state.map, 'map', equals(null)),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(false))
+            .having((state) => state.map, 'map', equals(null)),
       ],
     );
 
@@ -86,8 +96,14 @@ void main() {
         ..add(const PRListState(isLoading: true))
         ..add(PRListState(prList: prList)),
       expect: () => [
-        const AvgTimeToFirstReviewState(null, true),
-        AvgTimeToFirstReviewState({pr: null}, false),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(true))
+            .having((state) => state.map, 'map', equals(null)),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.isLoading, 'isLoading', equals(true))
+            .having((state) => state.map, 'map', equals(null)),
+        isA<AvgTimeToFirstReviewState>()
+            .having((state) => state.map, 'map', equals({pr: null})),
       ],
     );
   });
