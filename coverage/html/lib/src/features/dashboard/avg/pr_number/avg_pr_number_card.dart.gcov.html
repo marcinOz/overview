@@ -32,12 +32,12 @@
             <td></td>
             <td class="headerItem">Lines:</td>
             <td class="headerCovTableEntry">1</td>
-            <td class="headerCovTableEntry">10</td>
-            <td class="headerCovTableEntryLo">10.0 %</td>
+            <td class="headerCovTableEntry">11</td>
+            <td class="headerCovTableEntryLo">9.1 %</td>
           </tr>
           <tr>
             <td class="headerItem">Date:</td>
-            <td class="headerValue">2023-04-13 08:06:05</td>
+            <td class="headerValue">2023-04-15 11:39:35</td>
             <td></td>
             <td class="headerItem">Functions:</td>
             <td class="headerCovTableEntry">0</td>
@@ -77,17 +77,18 @@
 <a name="15"><span class="lineNum">      15 </span>            :   Widget build(BuildContext context) =&gt;</a>
 <a name="16"><span class="lineNum">      16 </span><span class="lineNoCov">          0 :       ChartCard&lt;PRListDataCubit, ChartCardState&gt;(</span></a>
 <a name="17"><span class="lineNum">      17 </span><span class="lineNoCov">          0 :         chart: (state) =&gt; _chart(state as PRListState),</span></a>
-<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :         header: (state) =&gt; _text(context, state as PRListState),</span></a>
-<a name="19"><span class="lineNum">      19 </span>            :       );</a>
-<a name="20"><span class="lineNum">      20 </span>            : </a>
-<a name="21"><span class="lineNum">      21 </span><span class="lineNoCov">          0 :   Widget _chart(PRListState state) =&gt; AvgPrNumberChart(prList: state.prList!);</span></a>
-<a name="22"><span class="lineNum">      22 </span>            : </a>
-<a name="23"><span class="lineNum">      23 </span><span class="lineNoCov">          0 :   Widget _text(BuildContext context, PRListState state) =&gt; Text(</span></a>
-<a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :         Loc.of(context)</span></a>
-<a name="25"><span class="lineNum">      25 </span><span class="lineNoCov">          0 :             .prNumber(CountAvgPrPerWeekUseCase()(state.prList!).toPrecision(1)),</span></a>
-<a name="26"><span class="lineNum">      26 </span><span class="lineNoCov">          0 :         style: context.titleSmallTextStyle(),</span></a>
-<a name="27"><span class="lineNum">      27 </span>            :       );</a>
-<a name="28"><span class="lineNum">      28 </span>            : }</a>
+<a name="18"><span class="lineNum">      18 </span><span class="lineNoCov">          0 :         title: (state) =&gt; _text(context, state as PRListState),</span></a>
+<a name="19"><span class="lineNum">      19 </span><span class="lineNoCov">          0 :         subtitle: context.loc().belowAvgPrNumber,</span></a>
+<a name="20"><span class="lineNum">      20 </span>            :       );</a>
+<a name="21"><span class="lineNum">      21 </span>            : </a>
+<a name="22"><span class="lineNum">      22 </span><span class="lineNoCov">          0 :   Widget _chart(PRListState state) =&gt; AvgPrNumberChart(prList: state.prList!);</span></a>
+<a name="23"><span class="lineNum">      23 </span>            : </a>
+<a name="24"><span class="lineNum">      24 </span><span class="lineNoCov">          0 :   Widget _text(BuildContext context, PRListState state) =&gt; Text(</span></a>
+<a name="25"><span class="lineNum">      25 </span><span class="lineNoCov">          0 :         Loc.of(context)</span></a>
+<a name="26"><span class="lineNum">      26 </span><span class="lineNoCov">          0 :             .prNumber(CountAvgPrPerWeekUseCase()(state.prList!).toPrecision(1)),</span></a>
+<a name="27"><span class="lineNum">      27 </span><span class="lineNoCov">          0 :         style: context.titleSmallTextStyle(),</span></a>
+<a name="28"><span class="lineNum">      28 </span>            :       );</a>
+<a name="29"><span class="lineNum">      29 </span>            : }</a>
 </pre>
       </td>
     </tr>

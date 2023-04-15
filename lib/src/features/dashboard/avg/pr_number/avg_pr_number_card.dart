@@ -15,7 +15,8 @@ class AvgPrNumberCard extends StatelessWidget {
   Widget build(BuildContext context) =>
       ChartCard<PRListDataCubit, ChartCardState>(
         chart: (state) => _chart(state as PRListState),
-        header: (state) => _text(context, state as PRListState),
+        title: (state) => _text(context, state as PRListState),
+        subtitle: context.loc().belowAvgPrNumber,
       );
 
   Widget _chart(PRListState state) => AvgPrNumberChart(prList: state.prList!);
