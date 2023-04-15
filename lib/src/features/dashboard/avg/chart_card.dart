@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overview/src/injectable/injectable.dart';
-import 'package:overview/src/localization/localizations.dart';
 import 'package:styleguide/styleguide.dart';
 
 abstract class ChartCardState {
   const ChartCardState(this.isLoading);
 
   final bool isLoading;
+
   bool isPopulated();
 }
 
@@ -16,11 +16,13 @@ class ChartCard<C extends Cubit<S>, S extends ChartCardState>
   const ChartCard({
     Key? key,
     required this.chart,
-    required this.header,
+    required this.title,
+    required this.subtitle,
   }) : super(key: key);
 
   final Widget Function(S) chart;
-  final Widget Function(S) header;
+  final Widget Function(S) title;
+  final String subtitle;
 
   @override
   State<ChartCard> createState() => _ChartCardState<C, S>();
@@ -44,7 +46,7 @@ class _ChartCardState<C extends Cubit<S>, S extends ChartCardState>
             bloc: _cubit,
             builder: (context, state) => Column(
               children: [
-                if (state.isPopulated()) widget.header(state),
+                if (state.isPopulated()) widget.title(state),
                 const SizedBox(height: Dimensions.paddingM),
                 _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
@@ -66,7 +68,7 @@ class _ChartCardState<C extends Cubit<S>, S extends ChartCardState>
       );
 
   Text _chartDescription(BuildContext context) => Text(
-        context.loc().belowAvgPrNumber,
+        widget.subtitle,
         style: context.bodyMediumTextStyle(),
       );
 }

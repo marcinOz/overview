@@ -6,6 +6,8 @@ import 'package:injectable/injectable.dart';
 import 'package:overview/src/features/dashboard/avg/pr_list_data_cubit.dart';
 import 'package:overview/src/github/github_service.dart';
 
+import '../chart_card.dart';
+
 @Injectable()
 class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
   AvgTimeToFirstReviewCubit(
@@ -55,12 +57,14 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
   }
 }
 
-class AvgTimeToFirstReviewState {
+class AvgTimeToFirstReviewState extends ChartCardState {
   const AvgTimeToFirstReviewState([
     this.map,
-    this.isLoading = false,
-  ]);
+    isLoading = false,
+  ]) : super(isLoading);
 
-  final bool isLoading;
   final Map<PullRequest, PullRequestReview?>? map;
+
+  @override
+  bool isPopulated() => !isLoading && map?.isNotEmpty == true;
 }
