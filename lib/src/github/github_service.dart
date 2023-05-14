@@ -112,4 +112,17 @@ class GithubService {
       return left(AppError(message: e.toString()));
     }
   }
+
+  Future<Either<AppError, List<Repository>>> searchRepositories(
+    String query,
+  ) async {
+    try {
+      final repoList = (await gitHub.search.repositories(query).toList());
+      return right(repoList);
+    } on AccessForbidden catch (e) {
+      return left(AppError(message: e.message!));
+    } catch (e) {
+      return left(AppError(message: e.toString()));
+    }
+  }
 }

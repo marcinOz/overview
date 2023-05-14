@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:github/github.dart';
 import 'package:injectable/injectable.dart';
 import 'package:overview/src/error/app_error.dart';
 import 'package:overview/src/github/github_service.dart';
@@ -19,6 +20,14 @@ class RepositoryNameCubit extends Cubit<RepositoryNameState> {
 
   void onNameChanged(String name) {
     emit(state.copyWith(name: name));
+  }
+
+  Future<List<Repository>> searchRepository(String name) async {
+    if (name.isEmpty) return [];
+    return (await _githubService.searchRepositories(name)).fold(
+      (error) => [],
+      (suggestions) => suggestions,
+    );
   }
 
   Future<void> onSubmitClicked() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overview/src/features/dashboard/repo_name/repository_name_cubit.dart';
+import 'package:overview/src/features/dashboard/widgets/search_repos_field_with_suggestions.dart';
 import 'package:overview/src/injectable/injectable.dart';
 import 'package:overview/src/localization/localizations.dart';
 import 'package:styleguide/styleguide.dart';
@@ -36,37 +37,57 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  SizedBox(
-                    width: 200,
-                    child: TextField(
-                      controller: _ownerEditingController,
-                      decoration: InputDecoration(
-                        labelText: context.loc().owner,
-                      ),
-                      onChanged: (value) {
-                        _cubit.onOwnerChanged(value);
-                      },
-                    ),
-                  ),
+                  _repoOwnerField(context),
                   const SizedBox(width: Dimensions.paddingM),
-                  SizedBox(
-                    width: 300,
-                    child: TextField(
-                      controller: _repoEditingController,
-                      decoration: InputDecoration(
-                        labelText: context.loc().name,
-                      ),
-                      onChanged: (value) {
-                        _cubit.onNameChanged(value);
-                      },
-                    ),
-                  ),
+                  _repoNameField(context),
                   const SizedBox(width: Dimensions.paddingXL),
                   _submitButton(context),
                 ],
               ),
+              const SizedBox(width: Dimensions.paddingXL),
+              _searchField(),
             ],
           ),
+        ),
+      );
+
+  Widget _repoOwnerField(BuildContext context) => SizedBox(
+        width: 200,
+        child: TextField(
+          controller: _ownerEditingController,
+          decoration: InputDecoration(
+            labelText: context.loc().owner,
+          ),
+          onChanged: (value) {
+            _cubit.onOwnerChanged(value);
+          },
+        ),
+      );
+
+  Widget _repoNameField(BuildContext context) => Container(
+        constraints: const BoxConstraints(
+          minWidth: 100,
+          maxWidth: 300,
+        ),
+        child: TextField(
+          controller: _repoEditingController,
+          decoration: InputDecoration(
+            labelText: context.loc().name,
+          ),
+          onChanged: (value) {
+            _cubit.onNameChanged(value);
+          },
+        ),
+      );
+
+  Widget _searchField() =>
+      BlocBuilder<RepositoryNameCubit, RepositoryNameState>(
+        bloc: _cubit,
+        builder: (context, state) => SearchReposFieldWithSuggestions(
+          onChanged: (name) => _cubit.searchRepository(name),
+          onSelected: (repo) => _cubit
+            ..onNameChanged(repo.name)
+            ..onOwnerChanged(repo.owner?.login ?? ''),
         ),
       );
 
