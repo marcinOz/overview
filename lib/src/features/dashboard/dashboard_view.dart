@@ -40,10 +40,10 @@ class DashboardView extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(width: Dimensions.paddingM),
-                Column(
+                const Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     RepositoryNameCard(),
                     SizedBox(height: Dimensions.paddingM),
                     AvgPrLeadTimeCard(),

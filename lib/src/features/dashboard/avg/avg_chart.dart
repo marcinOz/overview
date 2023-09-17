@@ -95,7 +95,6 @@ class _AvgChartState extends State<AvgChart> {
       );
 
   AxisTitles _leftTitles() => AxisTitles(
-        drawBehindEverything: true,
         sideTitles: SideTitles(
           reservedSize: 30,
           showTitles: true,
