@@ -27,6 +27,14 @@
   "@name": {
     "description": "Name"
   },
+  "repoName": "Repository name",
+  "@repoName": {
+    "description": "Repository name"
+  },
+  "searchRepoName": "Search for repository:",
+  "@searchRepoName": {
+    "description": "Search for repository:"
+  },
   "repoOwnerAndName": "Repository owner and name:",
   "@repoOwnerAndName": {
     "description": "Repository owner and name:"

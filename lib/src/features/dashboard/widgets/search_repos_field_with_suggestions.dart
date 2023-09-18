@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
-import 'package:overview/src/features/dashboard/widgets/search_field_with_suggestions.dart';
+import 'package:overview/src/localization/localizations.dart';
+import 'package:styleguide/styleguide.dart';
 
 class SearchReposFieldWithSuggestions extends StatefulWidget {
   const SearchReposFieldWithSuggestions({
@@ -25,6 +26,7 @@ class _SearchReposFieldWithSuggestionsState
 
   @override
   Widget build(BuildContext context) => SearchFieldWithSuggestions(
+        hintText: context.loc().repoName,
         onChanged: (name) async {
           suggestions = await widget.onChanged(name);
           return suggestions.map((e) => e.fullName).toList();
