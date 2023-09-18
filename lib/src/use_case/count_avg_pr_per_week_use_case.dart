@@ -27,12 +27,10 @@ class CountAvgPrPerWeekUseCase {
         prsSumInWeek += map[week]![user]!;
       }
       double weekAvg = prsSumInWeek / map[week]!.keys.length;
-      debugPrint('Week: $week, Avg: $weekAvg');
       sum += weekAvg;
     }
 
     double result = sum / map.keys.length;
-    debugPrint('Whole Avg: $result');
     return result;
   }
 }
