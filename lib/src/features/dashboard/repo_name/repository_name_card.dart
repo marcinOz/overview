@@ -32,6 +32,10 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(context.loc().searchRepoName),
+              const SizedBox(height: Dimensions.paddingS),
+              _searchField(),
+              const SizedBox(height: Dimensions.paddingM),
               Text(context.loc().repoOwnerAndName),
               Row(
                 mainAxisSize: MainAxisSize.min,
@@ -44,8 +48,6 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
                   _submitButton(context),
                 ],
               ),
-              const SizedBox(width: Dimensions.paddingXL),
-              _searchField(),
             ],
           ),
         ),
