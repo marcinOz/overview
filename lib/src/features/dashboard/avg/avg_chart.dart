@@ -41,7 +41,8 @@ class _AvgChartState extends State<AvgChart> {
 
   LineTouchData _tooltipsData() => LineTouchData(
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.white,
+          // TODO: Find where the tooltip color should go
+          // tooltipBgColor: Colors.white,
           getTooltipItems: (spots) => spots
               .map((s) => LineTooltipItem(
                     'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
