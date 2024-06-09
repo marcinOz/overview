@@ -30,6 +30,7 @@ class DashboardView extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(Dimensions.paddingM),
             child: Row(
+              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Column(

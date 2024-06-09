@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
 import 'package:intl/intl.dart';
+import 'package:overview/src/localization/localizations.dart';
 
 const List<Color> _gradientColors = [
   Color(0xff23b6e6),
@@ -41,12 +42,10 @@ class _AvgChartState extends State<AvgChart> {
 
   LineTouchData _tooltipsData() => LineTouchData(
         touchTooltipData: LineTouchTooltipData(
-          // TODO: Find where the tooltip color should go
-          // tooltipBgColor: Colors.white,
           getTooltipItems: (spots) => spots
               .map((s) => LineTooltipItem(
                     'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
-                    const TextStyle(color: Colors.black),
+                    const TextStyle(color: Colors.white),
                   ))
               .toList(),
         ),
@@ -56,15 +55,17 @@ class _AvgChartState extends State<AvgChart> {
         show: true,
         drawVerticalLine: true,
         getDrawingHorizontalLine: (value) =>
-            FlLine(color: const Color(0xff37434d), strokeWidth: 1),
+            const FlLine(color: Color(0xff37434d), strokeWidth: 1),
         getDrawingVerticalLine: (value) =>
-            FlLine(color: const Color(0xff37434d), strokeWidth: 1),
+            const FlLine(color: Color(0xff37434d), strokeWidth: 1),
       );
 
   FlTitlesData _flTitlesData() => FlTitlesData(
         show: true,
-        rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        rightTitles: const AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: _bottomTitles(),
         leftTitles: _leftTitles(),
       );
@@ -97,17 +98,16 @@ class _AvgChartState extends State<AvgChart> {
 
   AxisTitles _leftTitles() => AxisTitles(
         sideTitles: SideTitles(
-          reservedSize: 30,
+          reservedSize: 60,
           showTitles: true,
-          interval: 1,
           getTitlesWidget: (value, titleMeta) => _isNotCompleteNumber(value)
               ? const SizedBox()
               : Text(
-                  '${value.toInt()}D',
+                  Loc.of(context).days(value.toInt()),
                   style: const TextStyle(
                     color: Color(0xff67727d),
                     fontWeight: FontWeight.bold,
-                    fontSize: 15,
+                    fontSize: 12,
                   ),
                 ),
         ),
@@ -125,7 +125,7 @@ class _AvgChartState extends State<AvgChart> {
         gradient: const LinearGradient(colors: _gradientColors),
         barWidth: 5,
         isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
+        dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
           gradient: LinearGradient(

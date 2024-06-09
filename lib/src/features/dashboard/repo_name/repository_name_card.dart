@@ -38,8 +38,6 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
               const SizedBox(height: Dimensions.paddingM),
               Text(context.loc().repoOwnerAndName),
               Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   _repoOwnerField(context),
                   const SizedBox(width: Dimensions.paddingM),

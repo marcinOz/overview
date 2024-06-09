@@ -20,6 +20,7 @@ class LoadingButton extends StatelessWidget {
         children: [
           Positioned(
             child: ElevatedButton(
+              style: Theme.of(context).elevatedButtonTheme.style,
               onPressed: isLoading ? null : onClick,
               child: Text(text),
             ),

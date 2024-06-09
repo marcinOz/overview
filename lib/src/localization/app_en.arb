@@ -97,5 +97,14 @@
   "belowAvgPrNumber": "Below is AVG PR number in week per person",
   "@belowAvgPrNumber": {
     "description": "Below is AVG PR number in week per person"
+  },
+  "days": "{count, plural, zero{0} one{1 Day} other{{count} Days}}",
+  "@days": {
+    "description": "Below is AVG PR number in week per person",
+    "placeholders": {
+        "count": {
+          "type": "int"
+        }
+    }
   }
 }
