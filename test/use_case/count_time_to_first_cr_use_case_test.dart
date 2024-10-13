@@ -20,12 +20,15 @@ void main() {
     test('should return the average time to first CR', () {
       final pr1 = MockPullRequest();
       final review1 = MockPullRequestReview();
-      when(pr1.createdAt).thenReturn(DateTime.now().subtract(Duration(days: 1)));
+      when(pr1.createdAt)
+          .thenReturn(DateTime.now().subtract(const Duration(days: 1)));
       when(review1.submittedAt).thenReturn(DateTime.now());
       final pr2 = MockPullRequest();
       final review2 = MockPullRequestReview();
-      when(pr2.createdAt).thenReturn(DateTime.now().subtract(Duration(days: 2)));
-      when(review2.submittedAt).thenReturn(DateTime.now().subtract(Duration(hours: 1)));
+      when(pr2.createdAt)
+          .thenReturn(DateTime.now().subtract(const Duration(days: 2)));
+      when(review2.submittedAt)
+          .thenReturn(DateTime.now().subtract(const Duration(hours: 1)));
       final result = useCase.call({
         pr1: review1,
         pr2: review2,

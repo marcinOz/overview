@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:github/github.dart';
 import 'package:overview/src/extensions/week_of_year.dart';
 
