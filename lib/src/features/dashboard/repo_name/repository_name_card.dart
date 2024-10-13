@@ -25,29 +25,44 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
   }
 
   @override
-  Widget build(BuildContext context) => AppCard(
-        child: Padding(
-          padding: const EdgeInsets.all(Dimensions.paddingM),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(context.loc().searchRepoName),
-              const SizedBox(height: Dimensions.paddingS),
-              _searchField(),
-              const SizedBox(height: Dimensions.paddingM),
-              Text(context.loc().repoOwnerAndName),
-              Row(
-                children: [
-                  _repoOwnerField(context),
-                  const SizedBox(width: Dimensions.paddingM),
-                  _repoNameField(context),
-                  const SizedBox(width: Dimensions.paddingXL),
-                  _submitButton(context),
-                ],
-              ),
-            ],
+  Widget build(BuildContext context) => SizedBox(
+        width: MediaQuery.of(context).size.width - 178,
+        child: AppCard(
+          child: Padding(
+            padding: const EdgeInsets.all(Dimensions.paddingM),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(context.loc().searchRepoName),
+                const SizedBox(height: Dimensions.paddingS),
+                _searchField(),
+                const SizedBox(height: Dimensions.paddingM),
+                Text(context.loc().repoOwnerAndName),
+                Wrap(
+                  runSpacing: Dimensions.paddingM,
+                  children: [
+                    _repoOwnerField(context),
+                    const SizedBox(width: Dimensions.paddingM),
+                    _repoNameField(context),
+                    const SizedBox(width: Dimensions.paddingXL),
+                    _submitButton(context),
+                  ],
+                ),
+              ],
+            ),
           ),
+        ),
+      );
+
+  Widget _searchField() =>
+      BlocBuilder<RepositoryNameCubit, RepositoryNameState>(
+        bloc: _cubit,
+        builder: (context, state) => SearchReposFieldWithSuggestions(
+          onChanged: (name) => _cubit.searchRepository(name),
+          onSelected: (repo) => _cubit
+            ..onNameChanged(repo.name)
+            ..onOwnerChanged(repo.owner?.login ?? ''),
         ),
       );
 
@@ -77,17 +92,6 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
           onChanged: (value) {
             _cubit.onNameChanged(value);
           },
-        ),
-      );
-
-  Widget _searchField() =>
-      BlocBuilder<RepositoryNameCubit, RepositoryNameState>(
-        bloc: _cubit,
-        builder: (context, state) => SearchReposFieldWithSuggestions(
-          onChanged: (name) => _cubit.searchRepository(name),
-          onSelected: (repo) => _cubit
-            ..onNameChanged(repo.name)
-            ..onOwnerChanged(repo.owner?.login ?? ''),
         ),
       );
 

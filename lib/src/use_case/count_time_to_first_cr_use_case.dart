@@ -6,7 +6,7 @@ class CountTimeToFirstCrUseCase {
     int size = map.length;
     Duration duration = const Duration();
     for (MapEntry entry in map.entries) {
-      if (entry.value == null) continue;
+      if (entry.value == null || entry.value!.submittedAt == null) continue;
       duration += entry.key.createdAt!.difference(entry.value!.submittedAt!);
     }
     final double minutes = duration.inMinutes / size;

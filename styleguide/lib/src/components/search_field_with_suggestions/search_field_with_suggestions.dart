@@ -34,29 +34,15 @@ class _SearchFieldWithSuggestionsState
   }
 
   @override
-  Widget build(BuildContext context) => Row(
-        children: [
-          _searchIcon(),
-          SizedBox(
-            width: 300,
-            child: Autocomplete<String>(
-              optionsBuilder: _optionsBuilder,
-              onSelected: widget.onSelected,
-              fieldViewBuilder: _textField,
-              optionsViewBuilder: (context, onSelected, options) =>
-                  DropDown(options: options.toList(), onSelected: onSelected),
-            ),
-          ),
-          if (_isSearching) _circularProgress(),
-        ],
-      );
-
-  Widget _searchIcon() => const Padding(
-        padding: EdgeInsets.only(
-          top: Dimensions.paddingS,
-          right: Dimensions.paddingXS,
+  Widget build(BuildContext context) => SizedBox(
+        width: 300,
+        child: Autocomplete<String>(
+          optionsBuilder: _optionsBuilder,
+          onSelected: widget.onSelected,
+          fieldViewBuilder: _textField,
+          optionsViewBuilder: (context, onSelected, options) =>
+              DropDown(options: options.toList(), onSelected: onSelected),
         ),
-        child: Icon(Icons.search, size: 30),
       );
 
   TextField _textField(
@@ -68,7 +54,16 @@ class _SearchFieldWithSuggestionsState
       TextField(
         controller: textEditingController,
         focusNode: focusNode,
-        decoration: InputDecoration(hintText: widget.hintText),
+        decoration: InputDecoration(
+          border: const OutlineInputBorder(),
+          labelText: widget.hintText,
+          icon: Align(
+            widthFactor: 1.0,
+            heightFactor: 1.0,
+            child:
+                _isSearching ? _circularProgress() : const Icon(Icons.search),
+          ),
+        ),
         onChanged: (value) {
           setState(() => _isSearching = value.isNotEmpty);
         },

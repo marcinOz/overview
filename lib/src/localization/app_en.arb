@@ -106,5 +106,21 @@
           "type": "int"
         }
     }
+  },
+  "hours": "{count, plural, zero{0} one{1 hour} other{{count} hours}}",
+  "@hours": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "minutes": "{count, plural, zero{0} one{1 minute} other{{count} minutes}}",
+  "@minutes": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
   }
 }

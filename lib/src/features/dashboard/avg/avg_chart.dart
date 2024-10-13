@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
 import 'package:intl/intl.dart';
+import 'package:overview/src/features/dashboard/avg/chart_parts/pr_tooltip.dart';
 import 'package:overview/src/localization/localizations.dart';
 
 const List<Color> _gradientColors = [
@@ -26,6 +27,9 @@ class AvgChart extends StatefulWidget {
 class _AvgChartState extends State<AvgChart> {
   String _bottomCurrentVal = "";
 
+  Duration get period =>
+      widget.prList.last.createdAt!.difference(widget.prList.first.createdAt!);
+
   @override
   Widget build(BuildContext context) => LineChart(
         LineChartData(
@@ -40,15 +44,9 @@ class _AvgChartState extends State<AvgChart> {
         ),
       );
 
-  LineTouchData _tooltipsData() => LineTouchData(
-        touchTooltipData: LineTouchTooltipData(
-          getTooltipItems: (spots) => spots
-              .map((s) => LineTooltipItem(
-                    'PR #${widget.prList[s.spotIndex].number} \n${s.y} days',
-                    const TextStyle(color: Colors.white),
-                  ))
-              .toList(),
-        ),
+  LineTouchData _tooltipsData() => PRTooltip(
+        context: context,
+        prList: widget.prList,
       );
 
   FlGridData _flGridData() => FlGridData(
@@ -70,31 +68,34 @@ class _AvgChartState extends State<AvgChart> {
         leftTitles: _leftTitles(),
       );
 
-  AxisTitles _bottomTitles() => AxisTitles(
-        sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 22,
-            interval: 5259600000,
-            getTitlesWidget: (value, titleMeta) {
-              final title = DateFormat('MMM')
-                  .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
+  AxisTitles _bottomTitles() {
+    final interval = widget.prList.first.createdAt!.difference(widget.prList.last.createdAt!).inMilliseconds / 8;
+    return AxisTitles(
+      sideTitles: SideTitles(
+          showTitles: true,
+          reservedSize: 22,
+          interval: interval,
+          getTitlesWidget: (value, titleMeta) {
+            final title = DateFormat('dd.MM.yyyy')
+                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
 
-              if (_bottomCurrentVal == title) return const SizedBox();
+            if (_bottomCurrentVal == title) return const SizedBox();
 
-              _bottomCurrentVal = title;
-              return Padding(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  title,
-                  style: const TextStyle(
-                    color: Color(0xff68737d),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
+            _bottomCurrentVal = title;
+            return Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(
+                title,
+                style: const TextStyle(
+                  color: Color(0xff68737d),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
                 ),
-              );
-            }),
-      );
+              ),
+            );
+          }),
+    );
+  }
 
   AxisTitles _leftTitles() => AxisTitles(
         sideTitles: SideTitles(

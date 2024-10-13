@@ -48,7 +48,11 @@ class AvgTimeToFirstReviewCubit extends Cubit<AvgTimeToFirstReviewState> {
       (allReviews) {
         if (allReviews.isNotEmpty) {
           map[pr] = allReviews.reduce(
-            (a, b) => a.submittedAt!.isBefore(b.submittedAt!) ? a : b,
+            (a, b) {
+              if (a.submittedAt == null) return b;
+              if (b.submittedAt == null) return a;
+              return a.submittedAt!.isBefore(b.submittedAt!) ? a : b;
+            },
           );
         }
         emit(AvgTimeToFirstReviewState(map));
