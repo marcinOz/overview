@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
+import 'package:intl/intl.dart';
 import 'package:overview/src/localization/localizations.dart';
 
 class PRTooltip extends LineTouchData {
@@ -23,17 +24,20 @@ class PRTooltip extends LineTouchData {
         );
 
   static String _date(PullRequest pr) =>
-      '${pr.createdAt!.day}.${pr.createdAt!.month}.${pr.createdAt!.year}';
+      DateFormat('dd.MM.yyyy').format(pr.createdAt!);
 
   static String _getDuration(BuildContext context, double days) {
-    final d = days.toInt();
-    final h = ((days - d) * 24);
-    if (h < 1) {
-      return Loc.of(context).minutes((h * 60).toInt());
+    final totalMinutes = (days * 24 * 60).toInt();
+    final d = totalMinutes ~/ (24 * 60);
+    final h = (totalMinutes % (24 * 60)) ~/ 60;
+    final m = totalMinutes % 60;
+
+    if (d > 0) {
+      return '${Loc.of(context).days(d)} ${Loc.of(context).hours(h)}';
+    } else if (h > 0) {
+      return Loc.of(context).hours(h);
+    } else {
+      return Loc.of(context).minutes(m);
     }
-    if (d < 1) {
-      return Loc.of(context).hours((days * 24).toInt());
-    }
-    return '${Loc.of(context).days(d)} ${Loc.of(context).hours(h.toInt())}';
   }
 }

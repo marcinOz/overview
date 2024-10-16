@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:github/github.dart';
 import 'package:intl/intl.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/pr_tooltip.dart';
-import 'package:overview/src/localization/localizations.dart';
 
 const List<Color> _gradientColors = [
   Color(0xff23b6e6),
@@ -27,8 +26,9 @@ class AvgChart extends StatefulWidget {
 class _AvgChartState extends State<AvgChart> {
   String _bottomCurrentVal = "";
 
-  Duration get period =>
-      widget.prList.last.createdAt!.difference(widget.prList.first.createdAt!);
+  int get _projectDuration => widget.prList.first.createdAt!
+      .difference(widget.prList.last.createdAt!)
+      .inMilliseconds;
 
   @override
   Widget build(BuildContext context) => LineChart(
@@ -52,10 +52,20 @@ class _AvgChartState extends State<AvgChart> {
   FlGridData _flGridData() => FlGridData(
         show: true,
         drawVerticalLine: true,
+        verticalInterval: Duration.millisecondsPerDay / 2,
         getDrawingHorizontalLine: (value) =>
             const FlLine(color: Color(0xff37434d), strokeWidth: 1),
-        getDrawingVerticalLine: (value) =>
-            const FlLine(color: Color(0xff37434d), strokeWidth: 1),
+        getDrawingVerticalLine: (value) {
+          final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
+          final isWeekend = date.weekday == DateTime.saturday ||
+              date.weekday == DateTime.sunday;
+          return FlLine(
+            color: isWeekend
+                ? Colors.red.withOpacity(0.4)
+                : const Color(0xff37434d),
+            strokeWidth: 2,
+          );
+        },
       );
 
   FlTitlesData _flTitlesData() => FlTitlesData(
@@ -69,12 +79,11 @@ class _AvgChartState extends State<AvgChart> {
       );
 
   AxisTitles _bottomTitles() {
-    final interval = widget.prList.first.createdAt!.difference(widget.prList.last.createdAt!).inMilliseconds / 8;
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          interval: interval,
+          interval: _projectDuration / 8,
           getTitlesWidget: (value, titleMeta) {
             final title = DateFormat('dd.MM.yyyy')
                 .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
@@ -101,16 +110,16 @@ class _AvgChartState extends State<AvgChart> {
         sideTitles: SideTitles(
           reservedSize: 60,
           showTitles: true,
-          getTitlesWidget: (value, titleMeta) => _isNotCompleteNumber(value)
-              ? const SizedBox()
-              : Text(
-                  Loc.of(context).days(value.toInt()),
-                  style: const TextStyle(
-                    color: Color(0xff67727d),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 12,
-                  ),
-                ),
+          getTitlesWidget: (value, titleMeta) => Text(
+            value > 1
+                ? '${value.toStringAsFixed(1)} D'
+                : '${(value * 24).toInt()} H',
+            style: const TextStyle(
+              color: Color(0xff67727d),
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+            ),
+          ),
         ),
       );
 
@@ -129,6 +138,7 @@ class _AvgChartState extends State<AvgChart> {
         dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
+          spotsLine: _highlightDataSpots(),
           gradient: LinearGradient(
             colors:
                 _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
@@ -136,5 +146,13 @@ class _AvgChartState extends State<AvgChart> {
         ),
       );
 
-  bool _isNotCompleteNumber(double value) => value - value.toInt() > 0;
+  BarAreaSpotsLine _highlightDataSpots() {
+    return BarAreaSpotsLine(
+      show: true,
+      flLineStyle: FlLine(
+        color: Theme.of(context).highlightColor.withOpacity(0.5),
+        strokeWidth: 2,
+      ),
+    );
+  }
 }
