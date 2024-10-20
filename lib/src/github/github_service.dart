@@ -18,7 +18,13 @@ class GithubService {
   User? user;
   late Repository currentRepo;
   late final StreamController<Repository> _currentRepoStream;
-  Stream<Repository> get currentRepoStream => _currentRepoStream.stream;
+  Stream<Repository>? _stream;
+
+  Stream<Repository> get currentRepoStream {
+    if (_stream != null) return _stream!;
+    _stream = _currentRepoStream.stream.asBroadcastStream();
+    return _stream!;
+  }
 
   void dispose() {
     _currentRepoStream.close();
@@ -120,6 +126,28 @@ class GithubService {
       final repoList = (await gitHub.search.repositories(query).toList());
       return right(repoList);
     } on AccessForbidden catch (e) {
+      return left(AppError(message: e.message!));
+    } catch (e) {
+      return left(AppError(message: e.toString()));
+    }
+  }
+
+  Future<Either<AppError, List<Contributor>>>
+      getCurrentRepoContributors() async => getContributors(
+            currentRepo.owner!.login,
+            currentRepo.name,
+          );
+
+  Future<Either<AppError, List<Contributor>>> getContributors(
+    String owner,
+    String name,
+  ) async {
+    try {
+      final contributors = await gitHub.repositories
+          .listContributors(RepositorySlug(owner, name))
+          .toList();
+      return right(contributors);
+    } on GitHubError catch (e) {
       return left(AppError(message: e.message!));
     } catch (e) {
       return left(AppError(message: e.toString()));

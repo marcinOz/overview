@@ -9,6 +9,8 @@ import 'package:overview/src/localization/localizations.dart';
 import 'package:overview/src/use_case/logout_use_case.dart';
 import 'package:styleguide/styleguide.dart';
 
+import 'contributors/contributors_card.dart';
+
 class DashboardView extends StatelessWidget {
   const DashboardView({Key? key}) : super(key: key);
 
@@ -46,6 +48,8 @@ class DashboardView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     RepositoryNameCard(),
+                    SizedBox(height: Dimensions.paddingM),
+                    ContributorsCard(),
                     SizedBox(height: Dimensions.paddingM),
                     AvgPrLeadTimeCard(),
                     SizedBox(height: Dimensions.paddingM),

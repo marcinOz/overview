@@ -8,21 +8,23 @@ import 'package:overview/src/github/github_service.dart';
 
 @LazySingleton()
 class PRListDataCubit extends Cubit<PRListState> {
-  PRListDataCubit(this._service) : super(const PRListState()) {
+  PRListDataCubit(
+    this._service,
+  ) : super(const PRListState()) {
     _onInit();
   }
 
   final GithubService _service;
-  late final StreamSubscription _subscription;
+  late final StreamSubscription _repoSelectionSubscription;
 
   @override
   Future<void> close() {
-    _subscription.cancel();
+    _repoSelectionSubscription.cancel();
     return super.close();
   }
 
   void _onInit() {
-    _subscription = _service.currentRepoStream.listen((event) {
+    _repoSelectionSubscription = _service.currentRepoStream.listen((event) {
       emit(PRListState(repoName: event.name, isLoading: true));
       _getPRs();
     });

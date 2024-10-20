@@ -61,8 +61,8 @@ class _AvgChartState extends State<AvgChart> {
               date.weekday == DateTime.sunday;
           return FlLine(
             color: isWeekend
-                ? Colors.red.withOpacity(0.4)
-                : const Color(0xff37434d),
+                ? Colors.red.withOpacity(0.3)
+                : const Color(0x2037434d),
             strokeWidth: 2,
           );
         },

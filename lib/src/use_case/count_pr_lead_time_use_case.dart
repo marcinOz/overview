@@ -4,13 +4,12 @@ class CountPrLeadTimeUseCase {
   Duration call(List<PullRequest> prList) {
     if (prList.isEmpty) return Duration.zero;
 
-    int size = prList.length;
     Duration duration = const Duration();
     for (PullRequest pr in prList) {
-      duration += pr.createdAt!.difference(pr.closedAt!);
+      duration += pr.closedAt!.difference(pr.createdAt!);
     }
-    final double minutes = duration.inMinutes / size;
-    return Duration(minutes: minutes.toInt()).abs();
+    final double minutes = duration.inMinutes / prList.length;
+    return Duration(minutes: minutes.toInt());
   }
 }
 

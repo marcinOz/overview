@@ -122,5 +122,17 @@
         "type": "int"
       }
     }
+  },
+  "contributors": "Contributors",
+  "@contributors": {
+    "description": "Contributors"
+  },
+  "noContributorsFound": "No contributors found",
+  "@noContributorsFound": {
+    "description": "No contributors found"
+  },
+  "all": "All",
+  "@all": {
+    "description": "All"
   }
 }
