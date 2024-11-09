@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:overview/src/features/dashboard/contributors/contributors_cubit.dart';
+import 'package:overview/src/features/dashboard/contributors/current_contributor_data_cubit.dart';
 import 'package:overview/src/injectable/injectable.dart';
 import 'package:overview/src/localization/localizations.dart';
 import 'package:styleguide/styleguide.dart';
@@ -13,11 +14,12 @@ class ContributorsCard extends StatefulWidget {
 }
 
 class _ContributorsCardState extends State<ContributorsCard> {
-  final ContributorsCubit _cubit = getIt.get();
+  final ContributorsCubit _contributorsCubit = getIt.get();
+  final CurrentContributorDataCubit _currentContributorsCubit = getIt.get();
 
   @override
   void dispose() {
-    _cubit.close();
+    _contributorsCubit.close();
     super.dispose();
   }
 
@@ -35,7 +37,7 @@ class _ContributorsCardState extends State<ContributorsCard> {
                 ),
                 const SizedBox(height: Dimensions.paddingS),
                 BlocBuilder<ContributorsCubit, ContributorsState>(
-                  bloc: _cubit,
+                  bloc: _contributorsCubit,
                   builder: (BuildContext context, ContributorsState state) {
                     if (state.isLoading) {
                       return const CircularProgressIndicator();
@@ -57,20 +59,23 @@ class _ContributorsCardState extends State<ContributorsCard> {
       );
 
   Widget _contributorsDropDown(ContributorsState state) =>
-      DropdownButton<String>(
-        value: state.selectedContributor,
-        items: [
-          DropdownMenuItem(
-            value: ContributorsState.initialContributors,
-            child: Text(Loc.of(context).all),
-          ),
-          ...state.contributors!.map((contributor) {
-            return DropdownMenuItem(
-              value: contributor.login,
-              child: Text(contributor.login!),
-            );
-          }),
-        ],
-        onChanged: (value) => _cubit.selectContributor(value!),
+      BlocBuilder<CurrentContributorDataCubit, String>(
+        bloc: _currentContributorsCubit,
+        builder: (context, currentContributor) => DropdownButton<String>(
+          value: currentContributor,
+          items: [
+            DropdownMenuItem(
+              value: CurrentContributorDataCubit.initialContributors,
+              child: Text(Loc.of(context).all),
+            ),
+            ...state.contributors!.map((contributor) {
+              return DropdownMenuItem(
+                value: contributor.login,
+                child: Text(contributor.login!),
+              );
+            }),
+          ],
+          onChanged: (value) => _currentContributorsCubit.set(value!),
+        ),
       );
 }

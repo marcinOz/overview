@@ -18,10 +18,10 @@ dependencies:
   github: ^9.24.0
   flutter_bloc: ^8.1.6
   injectable: ^2.5.0
-  get_it: ^8.0.0
+  get_it: ^8.0.2
   dartz: 0.10.1
-  extended_image: ^8.3.1
-  shared_preferences: ^2.3.2
+  extended_image: ^9.0.7
+  shared_preferences: ^2.3.3
   fl_chart: ^0.69.0
 
   styleguide:

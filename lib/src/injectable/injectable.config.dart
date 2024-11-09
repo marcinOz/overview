@@ -16,6 +16,8 @@ import '../features/dashboard/avg/pr_list_data_cubit.dart' as _i447;
 import '../features/dashboard/avg/time_to_first_review/avg_time_to_first_review_cubit.dart'
     as _i640;
 import '../features/dashboard/contributors/contributors_cubit.dart' as _i518;
+import '../features/dashboard/contributors/current_contributor_data_cubit.dart'
+    as _i76;
 import '../features/dashboard/repo_name/repository_name_cubit.dart' as _i989;
 import '../features/dashboard/repos_list/repositories_list_cubit.dart' as _i995;
 import '../features/login/login_cubit.dart' as _i538;
@@ -34,6 +36,8 @@ _i174.GetIt $initGetIt(
     environmentFilter,
   );
   gh.singleton<_i722.SharedPreferences>(() => _i722.SharedPreferences());
+  gh.lazySingleton<_i76.CurrentContributorDataCubit>(
+      () => _i76.CurrentContributorDataCubit());
   gh.lazySingleton<_i583.GithubService>(
       () => _i583.GithubService(gh<_i722.SharedPreferences>()));
   gh.singleton<_i989.RepositoryNameCubit>(

@@ -12,6 +12,7 @@ class ContributorsCubit extends Cubit<ContributorsState> {
   }
 
   final GithubService _service;
+
   late final StreamSubscription _subscription;
 
   @override
@@ -35,28 +36,20 @@ class ContributorsCubit extends Cubit<ContributorsState> {
       },
     );
   }
-
-  void selectContributor(String contributor) {
-    emit(state.copyWith(selectedContributor: contributor));
-  }
 }
 
 class ContributorsState {
   const ContributorsState({
     this.contributors,
-    this.selectedContributor = initialContributors,
     this.isLoading = false,
   });
 
-  static const String initialContributors = "all";
-  final String selectedContributor;
   final List<Contributor>? contributors;
   final bool isLoading;
 
   @override
   String toString() {
     return '''ContributorsState{
-    selectedContributor: $selectedContributor, 
     contributors: $contributors, 
     isLoading: $isLoading
     }''';
@@ -65,22 +58,18 @@ class ContributorsState {
   @override
   bool operator ==(Object other) {
     return other is ContributorsState &&
-        selectedContributor == other.selectedContributor &&
         contributors == other.contributors &&
         isLoading == other.isLoading;
   }
 
   @override
-  int get hashCode =>
-      selectedContributor.hashCode ^ contributors.hashCode ^ isLoading.hashCode;
+  int get hashCode => contributors.hashCode ^ isLoading.hashCode;
 
   ContributorsState copyWith({
-    String? selectedContributor,
     List<Contributor>? contributors,
     bool? isLoading,
   }) =>
       ContributorsState(
-        selectedContributor: selectedContributor ?? this.selectedContributor,
         contributors: contributors ?? this.contributors,
         isLoading: isLoading ?? false,
       );

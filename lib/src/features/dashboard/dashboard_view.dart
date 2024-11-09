@@ -9,12 +9,25 @@ import 'package:overview/src/localization/localizations.dart';
 import 'package:overview/src/use_case/logout_use_case.dart';
 import 'package:styleguide/styleguide.dart';
 
+import '../../injectable/injectable.dart';
 import 'contributors/contributors_card.dart';
+import 'contributors/current_contributor_data_cubit.dart';
 
-class DashboardView extends StatelessWidget {
+class DashboardView extends StatefulWidget {
   const DashboardView({Key? key}) : super(key: key);
 
   static const routeName = '/dashboard';
+
+  @override
+  State<DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<DashboardView> {
+  @override
+  void dispose() {
+    getIt.get<CurrentContributorDataCubit>().close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
