@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github/github.dart';
 import 'package:injectable/injectable.dart';
 import 'package:overview/src/features/dashboard/avg/chart_card.dart';
+import 'package:overview/src/features/dashboard/contributors/current_contributor_data_cubit.dart';
 import 'package:overview/src/github/github_service.dart';
+import 'package:overview/src/injectable/injectable.dart';
 
 @LazySingleton()
 class PRListDataCubit extends Cubit<PRListState> {
@@ -16,10 +18,14 @@ class PRListDataCubit extends Cubit<PRListState> {
 
   final GithubService _service;
   late final StreamSubscription _repoSelectionSubscription;
+  late final StreamSubscription _contributorSubscription;
+  List<PullRequest> _allPRs = [];
+  String _currentContributor = CurrentContributorDataCubit.initialContributors;
 
   @override
   Future<void> close() {
     _repoSelectionSubscription.cancel();
+    _contributorSubscription.cancel();
     return super.close();
   }
 
@@ -28,6 +34,13 @@ class PRListDataCubit extends Cubit<PRListState> {
       emit(PRListState(repoName: event.name, isLoading: true));
       _getPRs();
     });
+
+    // Listen to contributor changes
+    final contributorCubit = getIt.get<CurrentContributorDataCubit>();
+    _contributorSubscription = contributorCubit.stream.listen((contributor) {
+      _currentContributor = contributor;
+      _filterPRsByContributor();
+    });
   }
 
   Future<void> _getPRs() async {
@@ -35,9 +48,26 @@ class PRListDataCubit extends Cubit<PRListState> {
       (l) => null,
       (prList) {
         prList.sort((a, b) => a.createdAt!.isBefore(b.createdAt!) ? 1 : -1);
-        emit(state.copyWith(prList: prList));
+        _allPRs = prList;
+        _filterPRsByContributor();
       },
     );
+  }
+
+  void _filterPRsByContributor() {
+    if (_allPRs.isEmpty) return;
+
+    if (_currentContributor ==
+        CurrentContributorDataCubit.initialContributors) {
+      // Show all PRs
+      emit(state.copyWith(prList: _allPRs));
+    } else {
+      // Filter PRs by contributor
+      final filteredPRs =
+          _allPRs.where((pr) => pr.user?.login == _currentContributor).toList();
+
+      emit(state.copyWith(prList: filteredPRs));
+    }
   }
 }
 
