@@ -15,20 +15,36 @@ class AvgTimeToFirstReviewCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ChartCard<AvgTimeToFirstReviewCubit, ChartCardState>(
-        chart: (state) => _chart(state as AvgTimeToFirstReviewState),
+        chart: (state, _) => _chart(state as AvgTimeToFirstReviewState),
         title: (state) => _text(context, state as AvgTimeToFirstReviewState),
         subtitle: context.loc().belowTimeToFirstCR(countHistoryThreshold),
       );
 
-  Widget _chart(AvgTimeToFirstReviewState state) => AvgTimeToFirstReviewChart(
-    map: state.map!,
-    countHistoryThreshold: countHistoryThreshold,
-  );
+  Widget _chart(AvgTimeToFirstReviewState state) {
+    if (state.map == null || state.map!.isEmpty) {
+      return const Center(
+        child: Text('No data available'),
+      );
+    }
 
-  Widget _text(BuildContext context, AvgTimeToFirstReviewState state) => Text(
-    Loc.of(context).timeToFirstCR(CountTimeToFirstCrUseCase()(
-      state.map!,
-    ).pretty()),
-    style: context.titleSmallTextStyle(),
-  );
+    return AvgTimeToFirstReviewChart(
+      map: state.map!,
+      countHistoryThreshold: countHistoryThreshold,
+    );
+  }
+
+  Widget _text(BuildContext context, AvgTimeToFirstReviewState state) {
+    if (state.map == null || state.map!.isEmpty) {
+      return Text(
+        Loc.of(context).timeToFirstCR("N/A"),
+        style: context.titleSmallTextStyle(),
+      );
+    }
+
+    final timeToFirstCR = CountTimeToFirstCrUseCase()(state.map!).pretty();
+    return Text(
+      Loc.of(context).timeToFirstCR(timeToFirstCR),
+      style: context.titleSmallTextStyle(),
+    );
+  }
 }

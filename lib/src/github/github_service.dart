@@ -119,6 +119,39 @@ class GithubService {
     }
   }
 
+  Future<Either<AppError, Map<int, List<PullRequestReview>>>>
+      getBatchReviewsForPRs(
+    List<PullRequest> prs,
+  ) async {
+    try {
+      final Map<int, List<PullRequestReview>> reviewsMap = {};
+
+      final futures = prs.map((pr) => gitHub.pullRequests
+              .listReviews(
+                RepositorySlug(
+                  currentRepo.owner!.login,
+                  currentRepo.name,
+                ),
+                pr.number!,
+              )
+              .toList()
+              .then((reviews) {
+            reviewsMap[pr.number!] = reviews;
+          }).catchError((e) {
+            print('Error fetching reviews for PR #${pr.number}: $e');
+            reviewsMap[pr.number!] = [];
+          }));
+
+      await Future.wait(futures);
+
+      return right(reviewsMap);
+    } on AccessForbidden catch (e) {
+      return left(AppError(message: e.message!));
+    } catch (e) {
+      return left(AppError(message: e.toString()));
+    }
+  }
+
   Future<Either<AppError, List<Repository>>> searchRepositories(
     String query,
   ) async {

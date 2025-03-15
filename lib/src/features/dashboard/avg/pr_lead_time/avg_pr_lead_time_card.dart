@@ -15,19 +15,23 @@ class AvgPrLeadTimeCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ChartCard<PRListDataCubit, ChartCardState>(
-        chart: (state) => _chart(state as PRListState),
+        chart: (state, _) => _chart(state as PRListState),
         title: (state) => _text(context, state as PRListState),
         subtitle: context.loc().belowPrLeadTime(countHistoryThreshold),
       );
 
-  Widget _chart(PRListState state) => AvgPrLeadTimeChart(
-        prList: state.prList!,
-        countHistoryThreshold: countHistoryThreshold,
-      );
+  Widget _chart(PRListState state) {
+    return AvgPrLeadTimeChart(
+      prList: state.prList!,
+      countHistoryThreshold: countHistoryThreshold,
+    );
+  }
 
-  Widget _text(BuildContext context, PRListState state) => Text(
-        Loc.of(context)
-            .avgPrLeadTime(CountPrLeadTimeUseCase()(state.prList!).pretty()),
-        style: context.titleSmallTextStyle(),
-      );
+  Widget _text(BuildContext context, PRListState state) {
+    final leadTime = CountPrLeadTimeUseCase()(state.prList!).pretty();
+    return Text(
+      Loc.of(context).avgPrLeadTime(leadTime),
+      style: context.titleSmallTextStyle(),
+    );
+  }
 }

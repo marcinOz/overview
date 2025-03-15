@@ -26,23 +26,43 @@ class AvgChart extends StatefulWidget {
 class _AvgChartState extends State<AvgChart> {
   String _bottomCurrentVal = "";
 
-  int get _projectDuration => widget.prList.first.createdAt!
-      .difference(widget.prList.last.createdAt!)
-      .inMilliseconds;
+  int get _projectDuration {
+    if (widget.prList.isEmpty || widget.prList.length == 1) {
+      // Return a default value if there are no PRs or only one PR
+      return Duration.millisecondsPerDay * 30; // Default to 30 days
+    }
+
+    return widget.prList.first.createdAt!
+        .difference(widget.prList.last.createdAt!)
+        .abs() // Ensure positive value
+        .inMilliseconds;
+  }
 
   @override
-  Widget build(BuildContext context) => LineChart(
-        LineChartData(
-          gridData: _flGridData(),
-          titlesData: _flTitlesData(),
-          borderData: _flBorderData(),
-          minY: 0,
-          lineTouchData: _tooltipsData(),
-          lineBarsData: [
-            _lineChartBarData(widget.prList),
-          ],
+  Widget build(BuildContext context) {
+    // If there are no PRs, show a message instead of the chart
+    if (widget.prList.isEmpty) {
+      return const Center(
+        child: Text(
+          'No pull requests to display for the selected period',
+          style: TextStyle(fontSize: 16),
         ),
       );
+    }
+
+    return LineChart(
+      LineChartData(
+        gridData: _flGridData(),
+        titlesData: _flTitlesData(),
+        borderData: _flBorderData(),
+        minY: 0,
+        lineTouchData: _tooltipsData(),
+        lineBarsData: [
+          _lineChartBarData(widget.prList),
+        ],
+      ),
+    );
+  }
 
   LineTouchData _tooltipsData() => PRTooltip(
         context: context,
@@ -61,7 +81,7 @@ class _AvgChartState extends State<AvgChart> {
               date.weekday == DateTime.sunday;
           return FlLine(
             color: isWeekend
-                ? Colors.red.withOpacity(0.3)
+                ? const Color(0xff9C27B0).withOpacity(0.3)
                 : const Color(0x2037434d),
             strokeWidth: 2,
           );
@@ -79,11 +99,17 @@ class _AvgChartState extends State<AvgChart> {
       );
 
   AxisTitles _bottomTitles() {
+    // Ensure interval is never zero or negative
+    final interval = _projectDuration / 8;
+    final safeInterval = interval <= 0
+        ? Duration.millisecondsPerDay.toDouble()
+        : interval.toDouble();
+
     return AxisTitles(
       sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 22,
-          interval: _projectDuration / 8,
+          interval: safeInterval,
           getTitlesWidget: (value, titleMeta) {
             final title = DateFormat('dd.MM.yyyy')
                 .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));

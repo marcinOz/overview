@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:overview/src/features/dashboard/avg/chart_parts/period_selector.dart';
+import 'package:overview/src/features/dashboard/chart_period/chart_period_cubit.dart';
 import 'package:overview/src/injectable/injectable.dart';
 import 'package:styleguide/styleguide.dart';
 
@@ -20,7 +22,7 @@ class ChartCard<C extends Cubit<S>, S extends ChartCardState>
     required this.subtitle,
   }) : super(key: key);
 
-  final Widget Function(S) chart;
+  final Widget Function(S, PeriodSelectorData?) chart;
   final Widget Function(S) title;
   final String subtitle;
 
@@ -45,8 +47,9 @@ class _ChartCardState<C extends Cubit<S>, S extends ChartCardState>
           child: BlocBuilder<C, S>(
             bloc: _cubit,
             builder: (context, state) => Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (state.isPopulated()) widget.title(state),
+                if (state.isPopulated()) _buildHeader(state),
                 const SizedBox(height: Dimensions.paddingM),
                 _chartDescription(context),
                 const SizedBox(height: Dimensions.paddingM),
@@ -58,12 +61,25 @@ class _ChartCardState<C extends Cubit<S>, S extends ChartCardState>
         ),
       );
 
+  Widget _buildHeader(S state) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        widget.title(state),
+      ],
+    );
+  }
+
   Padding _chart(BuildContext context, S state) => Padding(
         padding: const EdgeInsets.all(Dimensions.paddingL),
         child: SizedBox(
           height: 400,
           width: MediaQuery.of(context).size.width - 264,
-          child: widget.chart(state),
+          child: BlocBuilder<ChartPeriodCubit, PeriodSelectorData>(
+            builder: (context, periodData) {
+              return widget.chart(state, periodData);
+            },
+          ),
         ),
       );
 

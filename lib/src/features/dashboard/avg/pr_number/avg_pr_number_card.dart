@@ -14,16 +14,20 @@ class AvgPrNumberCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       ChartCard<PRListDataCubit, ChartCardState>(
-        chart: (state) => _chart(state as PRListState),
+        chart: (state, _) => _chart(state as PRListState),
         title: (state) => _text(context, state as PRListState),
         subtitle: context.loc().belowAvgPrNumber,
       );
 
-  Widget _chart(PRListState state) => AvgPrNumberChart(prList: state.prList!);
+  Widget _chart(PRListState state) {
+    return AvgPrNumberChart(prList: state.prList!);
+  }
 
-  Widget _text(BuildContext context, PRListState state) => Text(
-        Loc.of(context)
-            .prNumber(CountAvgPrPerWeekUseCase()(state.prList!).toPrecision(1)),
-        style: context.titleSmallTextStyle(),
-      );
+  Widget _text(BuildContext context, PRListState state) {
+    final count = CountAvgPrPerWeekUseCase()(state.prList!).toPrecision(1);
+    return Text(
+      Loc.of(context).prNumber(count),
+      style: context.titleSmallTextStyle(),
+    );
+  }
 }
