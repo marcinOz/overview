@@ -5,8 +5,9 @@ import 'package:github/github.dart';
 import 'package:intl/intl.dart';
 import 'package:overview/src/extensions/double_ext.dart';
 import 'package:overview/src/extensions/week_of_year.dart';
+import 'package:overview/src/features/dashboard/avg/chart_parts/chart_date_formatter.dart';
+import 'package:overview/src/features/dashboard/avg/chart_parts/chart_value_formatter.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/period_selector.dart';
-import 'package:overview/src/features/dashboard/avg/chart_parts/pr_tooltip.dart';
 import 'package:overview/src/features/dashboard/chart_period/chart_period_cubit.dart';
 import 'package:overview/src/use_case/count_avg_pr_per_week_use_case.dart';
 
@@ -96,7 +97,12 @@ class PrNumberCustomChart extends StatefulWidget {
 }
 
 class _PrNumberCustomChartState extends State<PrNumberCustomChart> {
-  String _bottomCurrentVal = "";
+  // Get the appropriate interval based on project duration
+  double get _dateInterval =>
+      ChartDateFormatter.getDateInterval(_projectDuration);
+
+  // Get the data points that will be displayed on the chart
+  List<FlSpot> get _dataSpots => widget.mapPrsToSpots(widget.prList);
 
   int get _projectDuration {
     if (widget.prList.isEmpty || widget.prList.length == 1) {
@@ -165,59 +171,23 @@ class _PrNumberCustomChartState extends State<PrNumberCustomChart> {
         ),
         topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
         bottomTitles: _bottomTitles(),
-        leftTitles: _leftTitles(),
+        leftTitles: ChartValueFormatter.getCountAxisTitles(_dataSpots),
       );
 
   AxisTitles _bottomTitles() {
-    // Ensure interval is never zero or negative
-    final interval = _projectDuration / 8;
-    final safeInterval = interval <= 0
-        ? Duration.millisecondsPerDay.toDouble()
-        : interval.toDouble();
+    final interval = _dateInterval;
 
     return AxisTitles(
       sideTitles: SideTitles(
-          showTitles: true,
-          reservedSize: 22,
-          interval: safeInterval,
-          getTitlesWidget: (value, titleMeta) {
-            final title = DateFormat('dd.MM.yyyy')
-                .format(DateTime.fromMillisecondsSinceEpoch(value.toInt()));
-
-            if (_bottomCurrentVal == title) return const SizedBox();
-
-            _bottomCurrentVal = title;
-            return Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                title,
-                style: const TextStyle(
-                  color: Color(0xff68737d),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            );
-          }),
+        showTitles: true,
+        reservedSize:
+            40, // Increased from 30 to allow more vertical space for labels
+        interval: interval,
+        getTitlesWidget: (value, titleMeta) =>
+            ChartDateFormatter.getDateLabel(value, interval),
+      ),
     );
   }
-
-  // Custom left titles implementation that shows just numbers without the 'D' suffix
-  AxisTitles _leftTitles() => AxisTitles(
-        sideTitles: SideTitles(
-          reservedSize: 40, // Reduced size since we don't have the 'D' suffix
-          showTitles: true,
-          getTitlesWidget: (value, titleMeta) => Text(
-            // Just show the number without any suffix
-            value.toStringAsFixed(1),
-            style: const TextStyle(
-              color: Color(0xff67727d),
-              fontWeight: FontWeight.bold,
-              fontSize: 12,
-            ),
-          ),
-        ),
-      );
 
   FlBorderData _flBorderData() => FlBorderData(
         show: true,
@@ -226,7 +196,7 @@ class _PrNumberCustomChartState extends State<PrNumberCustomChart> {
 
   LineChartBarData _lineChartBarData(List<PullRequest> prList) =>
       LineChartBarData(
-        spots: widget.mapPrsToSpots(prList),
+        spots: _dataSpots,
         isCurved: false,
         gradient: const LinearGradient(colors: [
           Color(0xff23b6e6),

@@ -5,7 +5,6 @@ import 'package:overview/src/features/dashboard/avg/chart_parts/period_selector.
 import 'package:overview/src/features/dashboard/chart_period/chart_period_cubit.dart';
 import 'package:overview/src/features/dashboard/repo_name/repository_name_cubit.dart';
 import 'package:overview/src/features/dashboard/widgets/search_repos_field_with_suggestions.dart';
-import 'package:overview/src/injectable/injectable.dart';
 import 'package:overview/src/localization/localizations.dart';
 import 'package:styleguide/styleguide.dart';
 
