@@ -159,6 +159,13 @@ class PeriodSelector extends StatelessWidget {
               : DateTime.now(),
         );
 
+        final isDarkMode = Theme.of(context).brightness == Brightness.dark;
+        final primaryColor = Theme.of(context).primaryColor;
+        final textColor = isDarkMode ? Colors.white : Colors.black87;
+        final backgroundColor = isDarkMode
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.surface;
+
         final dateRange = await showDateRangePicker(
           context: context,
           initialDateRange: initialDateRange,
@@ -167,8 +174,30 @@ class PeriodSelector extends StatelessWidget {
           builder: (context, child) {
             return Theme(
               data: Theme.of(context).copyWith(
-                colorScheme: ColorScheme.light(
-                  primary: Theme.of(context).primaryColor,
+                colorScheme: Theme.of(context).colorScheme.copyWith(
+                      primary: primaryColor,
+                      onPrimary: Colors.white,
+                      onSurface: textColor,
+                      surface: backgroundColor,
+                    ),
+                dialogBackgroundColor: backgroundColor,
+                textButtonTheme: TextButtonThemeData(
+                  style: TextButton.styleFrom(
+                    foregroundColor: primaryColor,
+                  ),
+                ),
+                appBarTheme: AppBarTheme(
+                  backgroundColor: isDarkMode
+                      ? Theme.of(context).primaryColor.withOpacity(0.2)
+                      : Theme.of(context).primaryColor.withOpacity(0.1),
+                  iconTheme: IconThemeData(
+                    color: textColor,
+                  ),
+                  titleTextStyle: TextStyle(
+                    color: textColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
               child: child!,

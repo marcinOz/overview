@@ -15,6 +15,9 @@ void main() async {
   // This prevents a sudden theme change when the app is first displayed.
   await settingsController.loadSettings();
 
+  // Register settingsController as a singleton in GetIt
+  getIt.registerSingleton<SettingsController>(settingsController);
+
   configureDependencies();
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the

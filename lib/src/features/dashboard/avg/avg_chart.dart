@@ -4,10 +4,13 @@ import 'package:github/github.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/chart_date_formatter.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/chart_value_formatter.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/pr_tooltip.dart';
+import 'package:styleguide/src/app_colors.dart';
+import 'package:styleguide/styleguide.dart';
 
+// Use colors from our AppColors class
 const List<Color> _gradientColors = [
-  Color(0xff23b6e6),
-  Color(0xff02d39a),
+  AppColors.chartGradientStart,
+  AppColors.chartGradientEnd,
 ];
 
 class AvgChart extends StatefulWidget {
@@ -48,10 +51,15 @@ class _AvgChartState extends State<AvgChart> {
   Widget build(BuildContext context) {
     // If there are no PRs, show a message instead of the chart
     if (widget.prList.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No pull requests to display for the selected period',
-          style: TextStyle(fontSize: 16),
+          style: TextStyle(
+            fontSize: 16,
+            color: context.isDarkMode
+                ? AppColors.darkTextPrimary
+                : AppColors.lightTextPrimary,
+          ),
         ),
       );
     }
@@ -79,16 +87,25 @@ class _AvgChartState extends State<AvgChart> {
         show: true,
         drawVerticalLine: true,
         verticalInterval: Duration.millisecondsPerDay / 2,
-        getDrawingHorizontalLine: (value) =>
-            const FlLine(color: Color(0xff37434d), strokeWidth: 1),
+        getDrawingHorizontalLine: (value) {
+          final gridColor = context.isDarkMode
+              ? AppColors.darkTextSecondary.withOpacity(0.2)
+              : AppColors.lightTextSecondary.withOpacity(0.2);
+          return FlLine(color: gridColor, strokeWidth: 1);
+        },
         getDrawingVerticalLine: (value) {
           final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
           final isWeekend = date.weekday == DateTime.saturday ||
               date.weekday == DateTime.sunday;
+
+          final gridColor = context.isDarkMode
+              ? AppColors.darkTextSecondary.withOpacity(0.1)
+              : AppColors.lightTextSecondary.withOpacity(0.1);
+
           return FlLine(
             color: isWeekend
-                ? const Color(0xff9C27B0).withOpacity(0.3)
-                : const Color(0x2037434d),
+                ? AppColors.weekendHighlight.withOpacity(0.3)
+                : gridColor,
             strokeWidth: 2,
           );
         },
@@ -119,10 +136,16 @@ class _AvgChartState extends State<AvgChart> {
     );
   }
 
-  FlBorderData _flBorderData() => FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d), width: 1),
-      );
+  FlBorderData _flBorderData() {
+    final borderColor = context.isDarkMode
+        ? AppColors.darkTextSecondary.withOpacity(0.3)
+        : AppColors.lightTextSecondary.withOpacity(0.3);
+
+    return FlBorderData(
+      show: true,
+      border: Border.all(color: borderColor, width: 1),
+    );
+  }
 
   LineChartBarData _lineChartBarData(List<PullRequest> prList) =>
       LineChartBarData(

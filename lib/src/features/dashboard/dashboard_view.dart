@@ -7,6 +7,7 @@ import 'package:overview/src/features/dashboard/chart_period/chart_period_cubit.
 import 'package:overview/src/features/dashboard/repo_name/repository_name_card.dart';
 import 'package:overview/src/features/dashboard/repos_list/repositories_list.dart';
 import 'package:overview/src/features/dashboard/widgets/profile_card.dart';
+import 'package:overview/src/features/settings/settings_controller.dart';
 import 'package:overview/src/localization/localizations.dart';
 import 'package:overview/src/use_case/logout_use_case.dart';
 import 'package:styleguide/styleguide.dart';
@@ -36,6 +37,19 @@ class _DashboardViewState extends State<DashboardView> {
         appBar: AppBar(
           title: Text(Loc.of(context).dashboard),
           actions: [
+            IconButton(
+              onPressed: () {
+                final controller = getIt<SettingsController>();
+                final isDark = context.isDarkMode;
+                controller.updateThemeMode(
+                  isDark ? ThemeMode.light : ThemeMode.dark,
+                );
+              },
+              icon: Icon(
+                context.isDarkMode ? Icons.light_mode : Icons.dark_mode,
+              ),
+              tooltip: context.isDarkMode ? 'Light mode' : 'Dark mode',
+            ),
             IconButton(
               onPressed: () => LogoutUseCase()(context),
               icon: const Icon(Icons.logout),

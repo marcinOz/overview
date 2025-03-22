@@ -1,3 +1,4 @@
+// dart format width=80
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
 // **************************************************************************
@@ -15,7 +16,7 @@ import '../data/shared_preferences.dart' as _i722;
 import '../features/dashboard/avg/pr_list_data_cubit.dart' as _i447;
 import '../features/dashboard/avg/time_to_first_review/avg_time_to_first_review_cubit.dart'
     as _i640;
-import '../features/dashboard/chart_period/chart_period_cubit.dart' as _i123;
+import '../features/dashboard/chart_period/chart_period_cubit.dart' as _i903;
 import '../features/dashboard/contributors/contributors_cubit.dart' as _i518;
 import '../features/dashboard/contributors/current_contributor_data_cubit.dart'
     as _i76;
@@ -37,9 +38,9 @@ _i174.GetIt $initGetIt(
     environmentFilter,
   );
   gh.singleton<_i722.SharedPreferences>(() => _i722.SharedPreferences());
+  gh.lazySingleton<_i903.ChartPeriodCubit>(() => _i903.ChartPeriodCubit());
   gh.lazySingleton<_i76.CurrentContributorDataCubit>(
       () => _i76.CurrentContributorDataCubit());
-  gh.lazySingleton<_i123.ChartPeriodCubit>(() => _i123.ChartPeriodCubit());
   gh.lazySingleton<_i583.GithubService>(
       () => _i583.GithubService(gh<_i722.SharedPreferences>()));
   gh.singleton<_i989.RepositoryNameCubit>(
