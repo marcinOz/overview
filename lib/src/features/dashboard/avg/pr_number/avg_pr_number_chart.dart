@@ -2,7 +2,6 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:github/github.dart';
-import 'package:intl/intl.dart';
 import 'package:overview/src/extensions/double_ext.dart';
 import 'package:overview/src/extensions/week_of_year.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/chart_date_formatter.dart';

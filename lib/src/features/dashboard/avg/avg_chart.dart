@@ -1,7 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:github/github.dart';
-import 'package:intl/intl.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/chart_date_formatter.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/chart_value_formatter.dart';
 import 'package:overview/src/features/dashboard/avg/chart_parts/pr_tooltip.dart';
