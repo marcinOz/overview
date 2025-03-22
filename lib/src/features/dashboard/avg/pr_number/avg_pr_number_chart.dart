@@ -9,6 +9,14 @@ import 'package:overview/src/features/dashboard/avg/chart_parts/chart_value_form
 import 'package:overview/src/features/dashboard/avg/chart_parts/period_selector.dart';
 import 'package:overview/src/features/dashboard/chart_period/chart_period_cubit.dart';
 import 'package:overview/src/use_case/count_avg_pr_per_week_use_case.dart';
+import 'package:styleguide/src/app_colors.dart';
+import 'package:styleguide/styleguide.dart';
+
+// Use colors from our AppColors class
+const List<Color> _gradientColors = [
+  AppColors.chartGradientStart,
+  AppColors.chartGradientEnd,
+];
 
 class AvgPrNumberChart extends StatelessWidget {
   const AvgPrNumberChart({
@@ -26,10 +34,15 @@ class AvgPrNumberChart extends StatelessWidget {
 
         // Handle empty list case
         if (filteredPrList.isEmpty) {
-          return const Center(
+          return Center(
             child: Text(
               'No pull requests to display for the selected period',
-              style: TextStyle(fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: context.isDarkMode
+                    ? AppColors.darkTextPrimary
+                    : AppColors.lightTextPrimary,
+              ),
             ),
           );
         }
@@ -148,16 +161,25 @@ class _PrNumberCustomChartState extends State<PrNumberCustomChart> {
         show: true,
         drawVerticalLine: true,
         verticalInterval: Duration.millisecondsPerDay / 2,
-        getDrawingHorizontalLine: (value) =>
-            const FlLine(color: Color(0xff37434d), strokeWidth: 1),
+        getDrawingHorizontalLine: (value) {
+          final gridColor = context.isDarkMode
+              ? AppColors.darkTextSecondary.withOpacity(0.2)
+              : AppColors.lightTextSecondary.withOpacity(0.2);
+          return FlLine(color: gridColor, strokeWidth: 1);
+        },
         getDrawingVerticalLine: (value) {
           final date = DateTime.fromMillisecondsSinceEpoch(value.toInt());
           final isWeekend = date.weekday == DateTime.saturday ||
               date.weekday == DateTime.sunday;
+
+          final gridColor = context.isDarkMode
+              ? AppColors.darkTextSecondary.withOpacity(0.1)
+              : AppColors.lightTextSecondary.withOpacity(0.1);
+
           return FlLine(
             color: isWeekend
-                ? const Color(0xff9C27B0).withOpacity(0.3)
-                : const Color(0x2037434d),
+                ? AppColors.weekendHighlight.withOpacity(0.3)
+                : gridColor,
             strokeWidth: 2,
           );
         },
@@ -188,30 +210,42 @@ class _PrNumberCustomChartState extends State<PrNumberCustomChart> {
     );
   }
 
-  FlBorderData _flBorderData() => FlBorderData(
-        show: true,
-        border: Border.all(color: const Color(0xff37434d), width: 1),
-      );
+  FlBorderData _flBorderData() {
+    final borderColor = context.isDarkMode
+        ? AppColors.darkTextSecondary.withOpacity(0.3)
+        : AppColors.lightTextSecondary.withOpacity(0.3);
+
+    return FlBorderData(
+      show: true,
+      border: Border.all(color: borderColor, width: 1),
+    );
+  }
 
   LineChartBarData _lineChartBarData(List<PullRequest> prList) =>
       LineChartBarData(
         spots: _dataSpots,
         isCurved: false,
-        gradient: const LinearGradient(colors: [
-          Color(0xff23b6e6),
-          Color(0xff02d39a),
-        ]),
+        gradient: const LinearGradient(colors: _gradientColors),
         barWidth: 5,
         isStrokeCapRound: true,
         dotData: const FlDotData(show: false),
         belowBarData: BarAreaData(
           show: true,
+          spotsLine: _highlightDataSpots(),
           gradient: LinearGradient(
-            colors: [
-              const Color(0xff23b6e6).withOpacity(0.3),
-              const Color(0xff02d39a).withOpacity(0.3),
-            ],
+            colors:
+                _gradientColors.map((color) => color.withOpacity(0.3)).toList(),
           ),
         ),
       );
+
+  BarAreaSpotsLine _highlightDataSpots() {
+    return BarAreaSpotsLine(
+      show: true,
+      flLineStyle: FlLine(
+        color: Theme.of(context).highlightColor.withOpacity(0.5),
+        strokeWidth: 2,
+      ),
+    );
+  }
 }

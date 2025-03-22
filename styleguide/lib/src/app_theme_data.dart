@@ -38,16 +38,16 @@ class AppThemeData {
           isLight ? AppColors.lightBackground : AppColors.darkBackground,
       cardColor: isLight ? AppColors.lightSurface : AppColors.darkSurface,
       dividerColor: isLight
-          ? AppColors.lightTextSecondary.withOpacity(0.2)
-          : AppColors.darkTextSecondary.withOpacity(0.2),
+          ? AppColors.lightTextSecondary.withAlpha((0.2 * 255).round())
+          : AppColors.darkTextSecondary.withAlpha((0.2 * 255).round()),
 
       // Date Picker Theme
       datePickerTheme: DatePickerThemeData(
         backgroundColor:
             isLight ? AppColors.lightSurface : AppColors.darkSurface,
         headerBackgroundColor: isLight
-            ? AppColors.primary.withOpacity(0.08)
-            : AppColors.primary.withOpacity(0.2),
+            ? AppColors.primary.withAlpha((0.08 * 255).round())
+            : AppColors.primary.withAlpha((0.2 * 255).round()),
         headerForegroundColor: isLight ? AppColors.primary : Colors.white,
         dayBackgroundColor: MaterialStateProperty.resolveWith((states) {
           if (states.contains(MaterialState.selected)) {
@@ -68,8 +68,8 @@ class AppThemeData {
               : AppColors.darkTextPrimary;
         }),
         todayBackgroundColor: MaterialStateProperty.resolveWith((_) => isLight
-            ? AppColors.primary.withOpacity(0.1)
-            : AppColors.primary.withOpacity(0.3)),
+            ? AppColors.primary.withAlpha((0.1 * 255).round())
+            : AppColors.primary.withAlpha((0.3 * 255).round())),
         todayForegroundColor: MaterialStateProperty.resolveWith(
             (_) => isLight ? AppColors.primary : Colors.white),
         yearBackgroundColor: MaterialStateProperty.resolveWith((states) {
