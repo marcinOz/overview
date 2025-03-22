@@ -34,8 +34,8 @@ class _SearchFieldWithSuggestionsState
   }
 
   @override
-  Widget build(BuildContext context) => SizedBox(
-        width: 300,
+  Widget build(BuildContext context) => Container(
+        width: double.infinity,
         child: Autocomplete<String>(
           optionsBuilder: _optionsBuilder,
           onSelected: widget.onSelected,
@@ -55,27 +55,37 @@ class _SearchFieldWithSuggestionsState
         controller: textEditingController,
         focusNode: focusNode,
         decoration: InputDecoration(
-          border: const OutlineInputBorder(),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(Dimensions.cornerRadiusM),
+          ),
+          contentPadding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: Dimensions.paddingM,
+          ),
           labelText: widget.hintText,
-          icon: Align(
-            widthFactor: 1.0,
-            heightFactor: 1.0,
-            child:
-                _isSearching ? _circularProgress() : const Icon(Icons.search),
+          prefixIcon: Container(
+            width: 40,
+            height: 40,
+            padding: const EdgeInsets.all(10),
+            child: _isSearching
+                ? SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  )
+                : Icon(
+                    Icons.search,
+                    size: 20,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
           ),
         ),
         onChanged: (value) {
           setState(() => _isSearching = value.isNotEmpty);
         },
-      );
-
-  Padding _circularProgress() => const Padding(
-        padding: EdgeInsets.only(top: Dimensions.paddingM),
-        child: SizedBox(
-          height: Dimensions.paddingM,
-          width: Dimensions.paddingM,
-          child: CircularProgressIndicator(),
-        ),
       );
 
   FutureOr<Iterable<String>> _optionsBuilder(

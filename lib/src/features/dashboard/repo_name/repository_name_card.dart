@@ -45,20 +45,10 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildHeader(context),
-                const SizedBox(height: Dimensions.paddingS),
-                _searchField(),
                 const SizedBox(height: Dimensions.paddingM),
-                Text(context.loc().repoOwnerAndName),
-                Wrap(
-                  runSpacing: Dimensions.paddingM,
-                  children: [
-                    _repoOwnerField(context),
-                    const SizedBox(width: Dimensions.paddingM),
-                    _repoNameField(context),
-                    const SizedBox(width: Dimensions.paddingXL),
-                    _submitButton(context),
-                  ],
-                ),
+                _searchField(),
+                const SizedBox(height: Dimensions.paddingL),
+                _buildFormSection(context),
               ],
             ),
           ),
@@ -69,20 +59,89 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(context.loc().searchRepoName),
+        Row(
+          children: [
+            Icon(
+              Icons.search_rounded,
+              color: Theme.of(context).primaryColor,
+              size: 20,
+            ),
+            const SizedBox(width: Dimensions.paddingXS),
+            Text(
+              context.loc().searchRepoName,
+              style: context.titleSmallTextStyle().copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+            ),
+          ],
+        ),
         _buildPeriodSelector(),
       ],
+    );
+  }
+
+  Widget _buildFormSection(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLowest,
+        borderRadius: BorderRadius.circular(Dimensions.cornerRadiusM),
+      ),
+      padding: const EdgeInsets.all(Dimensions.paddingM),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.source_outlined,
+                color: Theme.of(context).colorScheme.primary,
+                size: 18,
+              ),
+              const SizedBox(width: Dimensions.paddingXS),
+              Text(
+                context.loc().repoOwnerAndName,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Dimensions.paddingM),
+          Wrap(
+            spacing: Dimensions.paddingM,
+            runSpacing: Dimensions.paddingM,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              _repoOwnerField(context),
+              _repoNameField(context),
+              _submitButton(context),
+            ],
+          ),
+        ],
+      ),
     );
   }
 
   Widget _buildPeriodSelector() {
     return BlocBuilder<ChartPeriodCubit, PeriodSelectorData>(
       builder: (context, periodData) {
-        return PeriodSelector(
-          currentPeriod: periodData,
-          onPeriodChanged: (newPeriod) {
-            context.read<ChartPeriodCubit>().setPeriod(newPeriod);
-          },
+        return Container(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerLowest,
+            borderRadius: BorderRadius.circular(Dimensions.cornerRadiusM),
+          ),
+          padding: const EdgeInsets.symmetric(
+            horizontal: Dimensions.paddingXS,
+            vertical: 2,
+          ),
+          child: PeriodSelector(
+            currentPeriod: periodData,
+            onPeriodChanged: (newPeriod) {
+              context.read<ChartPeriodCubit>().setPeriod(newPeriod);
+            },
+          ),
         );
       },
     );
@@ -91,20 +150,35 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
   Widget _searchField() =>
       BlocBuilder<RepositoryNameCubit, RepositoryNameState>(
         bloc: _repositoryNameCubit,
-        builder: (context, state) => SearchReposFieldWithSuggestions(
-          onChanged: (name) => _repositoryNameCubit.searchRepository(name),
-          onSelected: (repo) => _repositoryNameCubit
-            ..onNameChanged(repo.name)
-            ..onOwnerChanged(repo.owner?.login ?? ''),
+        builder: (context, state) => Container(
+          margin: const EdgeInsets.symmetric(vertical: Dimensions.paddingXS),
+          child: SearchReposFieldWithSuggestions(
+            onChanged: (name) => _repositoryNameCubit.searchRepository(name),
+            onSelected: (repo) => _repositoryNameCubit
+              ..onNameChanged(repo.name)
+              ..onOwnerChanged(repo.owner?.login ?? ''),
+          ),
         ),
       );
 
   Widget _repoOwnerField(BuildContext context) => SizedBox(
-        width: 200,
+        width: 220,
         child: TextField(
           controller: _ownerController,
           decoration: InputDecoration(
             labelText: context.loc().owner,
+            prefixIcon: Icon(
+              Icons.account_circle_outlined,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Dimensions.cornerRadiusM),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: Dimensions.paddingS,
+            ),
           ),
           onChanged: (value) {
             _repositoryNameCubit.onOwnerChanged(value);
@@ -112,15 +186,24 @@ class _RepositoryNameCardState extends State<RepositoryNameCard> {
         ),
       );
 
-  Widget _repoNameField(BuildContext context) => Container(
-        constraints: const BoxConstraints(
-          minWidth: 100,
-          maxWidth: 300,
-        ),
+  Widget _repoNameField(BuildContext context) => SizedBox(
+        width: 220,
         child: TextField(
           controller: _repoController,
           decoration: InputDecoration(
             labelText: context.loc().name,
+            prefixIcon: Icon(
+              Icons.folder_outlined,
+              size: 20,
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(Dimensions.cornerRadiusM),
+            ),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 12,
+              horizontal: Dimensions.paddingS,
+            ),
           ),
           onChanged: (value) {
             _repositoryNameCubit.onNameChanged(value);
