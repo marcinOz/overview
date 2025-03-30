@@ -1,3 +1,4 @@
+![CodeRabbit Pull Request Reviews](https://img.shields.io/coderabbit/prs/github/marcinOz/overview?utm_source=oss&utm_medium=github&utm_campaign=marcinOz%2Foverview&labelColor=171717&color=FF570A&link=https%3A%2F%2Fcoderabbit.ai&label=CodeRabbit+Reviews)
 # overview
 
 Developer Statistics Overview is a mobile application built with Flutter that allows developers to track and analyze their performance on various developer platforms, including Github, Stack Overflow, and more.
